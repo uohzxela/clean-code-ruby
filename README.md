@@ -53,7 +53,7 @@ yyyymmdstr = Time.now.strftime('%Y/%m/%d')
 
 **Good:**
 ```ruby
-currentDate = Time.now.strftime('%Y/%m/%d')
+current_date = Time.now.strftime('%Y/%m/%d')
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -82,7 +82,7 @@ Make your names searchable.
 ```ruby
 # What the heck is 86400 for?
 status = Timeout::timeout(86400) {
-  # Execute a long-running block.
+  # ...
 }
 ```
 
@@ -92,25 +92,25 @@ status = Timeout::timeout(86400) {
 SECONDS_IN_A_DAY = 86400
 
 status = Timeout::timeout(SECONDS_IN_A_DAY) {
-  # Execute a long-running block.
+  # ...
 }
 ```
 **[⬆ back to top](#table-of-contents)**
 
 ### Use explanatory variables
 **Bad:**
-```javascript
-const address = 'One Infinite Loop, Cupertino 95014';
-const cityZipCodeRegex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/;
-saveCityZipCode(address.match(cityZipCodeRegex)[1], address.match(cityZipCodeRegex)[2]);
+```ruby
+address = 'One Infinite Loop, Cupertino 95014'
+city_zip_code_regex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/
+save_city_zip_code(city_zip_code_regex.match(address)[1], city_zip_code_regex.match(address)[2])
 ```
 
 **Good:**
-```javascript
-const address = 'One Infinite Loop, Cupertino 95014';
-const cityZipCodeRegex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/;
-const [, city, zipCode] = address.match(cityZipCodeRegex) || [];
-saveCityZipCode(city, zipCode);
+```ruby
+address = 'One Infinite Loop, Cupertino 95014'
+city_zip_code_regex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/
+_, city, zip_code = city_zip_code_regex.match(address).to_a
+save_city_zip_code(city, zip_code)
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -118,30 +118,30 @@ saveCityZipCode(city, zipCode);
 Explicit is better than implicit.
 
 **Bad:**
-```javascript
-const locations = ['Austin', 'New York', 'San Francisco'];
-locations.forEach((l) => {
-  doStuff();
-  doSomeOtherStuff();
-  // ...
-  // ...
-  // ...
-  // Wait, what is `l` for again?
-  dispatch(l);
-});
+```ruby
+locations = ['Austin', 'New York', 'San Francisco']
+locations.each do |l|
+  do_stuff()
+  do_some_other_stuff()
+  # ...
+  # ...
+  # ...
+  # Wait, what is `l` for again?
+  dispatch(l)
+end
 ```
 
 **Good:**
-```javascript
-const locations = ['Austin', 'New York', 'San Francisco'];
-locations.forEach((location) => {
-  doStuff();
-  doSomeOtherStuff();
-  // ...
-  // ...
-  // ...
-  dispatch(location);
-});
+```ruby
+locations = ['Austin', 'New York', 'San Francisco']
+locations.each do |location|
+  do_stuff()
+  do_some_other_stuff()
+  # ...
+  # ...
+  # ...
+  dispatch(location)
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -150,53 +150,48 @@ If your class/object name tells you something, don't repeat that in your
 variable name.
 
 **Bad:**
-```javascript
-const Car = {
-  carMake: 'Honda',
-  carModel: 'Accord',
-  carColor: 'Blue'
-};
-
-function paintCar(car) {
-  car.carColor = 'Red';
+```ruby
+car = {
+  car_make: 'Honda',
+  car_model: 'Accord',
+  car_color: 'Blue'
 }
+
+def paint_car(car)
+  car['car_color'] = 'Red'
+end
 ```
 
 **Good:**
-```javascript
-const Car = {
+```ruby
+car = {
   make: 'Honda',
   model: 'Accord',
   color: 'Blue'
-};
-
-function paintCar(car) {
-  car.color = 'Red';
 }
+
+def paint_car(car)
+  car['car_color'] = 'Red'
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
 ### Use default arguments instead of short circuiting or conditionals
-Default arguments are often cleaner than short circuiting. Be aware that if you
-use them, your function will only provide default values for `undefined`
-arguments. Other "falsy" values such as `''`, `""`, `false`, `null`, `0`, and
-`NaN`, will not be replaced by a default value.
+Default arguments are often cleaner than short circuiting. Be aware that if you use them, your function will only provide default values for undefined arguments. Other "falsy" values such as `''`, `""`, `false` and `nil` will not be replaced by a default value.
 
 **Bad:**
-```javascript
-function createMicrobrewery(name) {
-  const breweryName = name || 'Hipster Brew Co.';
-  // ...
-}
-
+```ruby
+def create_micro_brewery(name)
+  brewery_name = name || 'Hipster Brew Co.'
+  # ...
+end
 ```
 
 **Good:**
-```javascript
-function createMicrobrewery(breweryName = 'Hipster Brew Co.') {
-  // ...
-}
-
+```ruby
+def create_micro_brewery(brewery_name='Hipster Brew Co.')
+  # ...
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
