@@ -249,29 +249,29 @@ easily and your code will read much cleaner. If you take nothing else away from
 this guide other than this, you'll be ahead of many developers.
 
 **Bad:**
-```javascript
-function emailClients(clients) {
-  clients.forEach((client) => {
-    const clientRecord = database.lookup(client);
-    if (clientRecord.isActive()) {
-      email(client);
-    }
-  });
-}
+```ruby
+def email_clients(clients) do
+  clients.each do |client|
+    client_record = database.lookup(client)
+    if client_record.is_active()
+      email(client)
+    end
+  end
+end
 ```
 
 **Good:**
-```javascript
-function emailActiveClients(clients) {
+```ruby
+def email_active_clients(clients) do
   clients
-    .filter(isActiveClient)
-    .forEach(email);
-}
+    .filter(&method(:is_active_client))
+    .each(&method(:email))
+end
 
-function isActiveClient(client) {
-  const clientRecord = database.lookup(client);
-  return clientRecord.isActive();
-}
+def is_active_client(client) do
+  client_record = database.lookup(client)
+  client_record.is_active()
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
