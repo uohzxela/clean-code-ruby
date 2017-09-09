@@ -158,7 +158,7 @@ car = {
 }
 
 def paint_car(car)
-  car['car_color'] = 'Red'
+  car[:car_color] = 'Red'
 end
 ```
 
@@ -171,7 +171,7 @@ car = {
 }
 
 def paint_car(car)
-  car['car_color'] = 'Red'
+  car[:color] = 'Red'
 end
 ```
 **[⬆ back to top](#table-of-contents)**
