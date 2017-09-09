@@ -208,41 +208,35 @@ more than two arguments then your function is trying to do too much. In cases
 where it's not, most of the time a higher-level object will suffice as an
 argument.
 
-Since JavaScript allows you to make objects on the fly, without a lot of class
+Since Ruby allows you to make objects on the fly, without a lot of class
 boilerplate, you can use an object if you are finding yourself needing a
 lot of arguments.
 
-To make it obvious what properties the function expects, you can use the ES2015/ES6
-destructuring syntax. This has a few advantages:
+To make it obvious what properties the function expects, you can use the keyword arguments syntax (introduced in Ruby 2.1). This has a few advantages:
 
 1. When someone looks at the function signature, it's immediately clear what
 properties are being used.
-2. Destructuring also clones the specified primitive values of the argument
-object passed into the function. This can help prevent side effects. Note:
-objects and arrays that are destructured from the argument object are NOT
-cloned.
-3. Linters can warn you about unused properties, which would be impossible
-without destructuring.
+2. If a required keyword argument is missing, Ruby will raise a useful `ArgumentError` that tells us which required argument we must include.
 
 **Bad:**
-```javascript
-function createMenu(title, body, buttonText, cancellable) {
-  // ...
-}
+```ruby
+def create_menu(title, body, button_text, cancellable) do
+  # ...
+end
 ```
 
 **Good:**
-```javascript
-function createMenu({ title, body, buttonText, cancellable }) {
-  // ...
-}
+```ruby
+def create_menu(title:, body:, button_text:, cancellable:) do
+  # ...
+end
 
-createMenu({
+create_menu({
   title: 'Foo',
   body: 'Bar',
-  buttonText: 'Baz',
+  button_text: 'Baz',
   cancellable: true
-});
+})
 ```
 **[⬆ back to top](#table-of-contents)**
 
