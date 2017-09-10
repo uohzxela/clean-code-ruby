@@ -264,7 +264,7 @@ end
 ```ruby
 def email_active_clients(clients)
   clients
-    .filter(&method(:is_active_client))
+    .select(&method(:is_active_client))
     .each(&method(:email))
 end
 
