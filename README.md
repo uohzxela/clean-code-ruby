@@ -220,14 +220,14 @@ properties are being used.
 
 **Bad:**
 ```ruby
-def create_menu(title, body, button_text, cancellable) do
+def create_menu(title, body, button_text, cancellable)
   # ...
 end
 ```
 
 **Good:**
 ```ruby
-def create_menu(title:, body:, button_text:, cancellable:) do
+def create_menu(title:, body:, button_text:, cancellable:)
   # ...
 end
 
@@ -250,7 +250,7 @@ this guide other than this, you'll be ahead of many developers.
 
 **Bad:**
 ```ruby
-def email_clients(clients) do
+def email_clients(clients)
   clients.each do |client|
     client_record = database.lookup(client)
     if client_record.is_active()
@@ -262,13 +262,13 @@ end
 
 **Good:**
 ```ruby
-def email_active_clients(clients) do
+def email_active_clients(clients)
   clients
     .filter(&method(:is_active_client))
     .each(&method(:email))
 end
 
-def is_active_client(client) do
+def is_active_client(client)
   client_record = database.lookup(client)
   client_record.is_active()
 end
@@ -278,25 +278,25 @@ end
 ### Function names should say what they do
 
 **Bad:**
-```javascript
-function addToDate(date, month) {
-  // ...
-}
+```ruby
+def add_to_date(date, month)
+  # ...
+end
 
-const date = new Date();
+date = DateTime.now
 
-// It's hard to to tell from the function name what is added
-addToDate(date, 1);
+# It's hard to to tell from the function name what is added
+add_to_date(date, 1)
 ```
 
 **Good:**
-```javascript
-function addMonthToDate(month, date) {
-  // ...
-}
+```ruby
+def add_month_to_date(date, month)
+  # ...
+end
 
-const date = new Date();
-addMonthToDate(1, date);
+date = DateTime.new
+add_month_to_date(date, 1)
 ```
 **[⬆ back to top](#table-of-contents)**
 
