@@ -306,65 +306,63 @@ doing too much. Splitting up functions leads to reusability and easier
 testing.
 
 **Bad:**
-```javascript
-function parseBetterJSAlternative(code) {
-  const REGEXES = [
-    // ...
-  ];
+```ruby
+def parse(code)
+  REGEXES = [
+    # ...
+  ]
 
-  const statements = code.split(' ');
-  const tokens = [];
-  REGEXES.forEach((REGEX) => {
-    statements.forEach((statement) => {
-      // ...
-    });
-  });
+  statements = code.split(' ')
+  tokens = []
+  REGEXES.each do |REGEX|
+    statements.each do |statement|
+      # ...
+    end
+  end
 
-  const ast = [];
-  tokens.forEach((token) => {
-    // lex...
-  });
+  ast = []
+  tokens.each do |token|
+    # lex...
+  end
 
-  ast.forEach((node) => {
-    // parse...
-  });
-}
+  ast.each do |node|
+    # parse...
+  end
+end
 ```
 
 **Good:**
-```javascript
-function tokenize(code) {
-  const REGEXES = [
-    // ...
-  ];
+```ruby
+def tokenize(code)
+  REGEXES = [
+    # ...
+  ]
 
-  const statements = code.split(' ');
-  const tokens = [];
-  REGEXES.forEach((REGEX) => {
-    statements.forEach((statement) => {
-      tokens.push( /* ... */ );
-    });
-  });
+  statements = code.split(' ')
+  tokens = []
+  REGEXES.each do |REGEX|
+    statements.each do |statement|
+      # tokens.push(...)
+    end
+  end
+  tokens
+end
 
-  return tokens;
-}
+def lex(tokens)
+  ast = []
+  tokens.each do |token|
+    # ast.push(...)
+  end
+  ast
+end
 
-function lexer(tokens) {
-  const ast = [];
-  tokens.forEach((token) => {
-    ast.push( /* ... */ );
-  });
-
-  return ast;
-}
-
-function parseBetterJSAlternative(code) {
-  const tokens = tokenize(code);
-  const ast = lexer(tokens);
-  ast.forEach((node) => {
-    // parse...
-  });
-}
+def parse(code)
+  tokens = tokenize(code)
+  ast = lex(tokens)
+  ast.each do |node|
+    # parse...
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
