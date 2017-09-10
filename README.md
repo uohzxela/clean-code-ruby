@@ -509,7 +509,7 @@ puts(newName) # ['Ryan', 'McDermott']
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid Side Effects (part 2)
-In JavaScript, primitives are passed by value and objects/arrays are passed by
+In Ruby, primitives are passed by value and objects/arrays are passed by
 reference. In the case of objects and arrays, if your function makes a change
 in a shopping cart array, for example, by adding an item to purchase,
 then any other function that uses that `cart` array will be affected by this
@@ -523,10 +523,10 @@ request. Now, what if in the meantime the user accidentally clicks "Add to Cart"
 button on an item they don't actually want before the network request begins?
 If that happens and the network request begins, then that purchase function
 will send the accidentally added item because it has a reference to a shopping
-cart array that the `addItemToCart` function modified by adding an unwanted
+cart array that the `add_item_to_cart` function modified by adding an unwanted
 item.
 
-A great solution would be for the `addItemToCart` to always clone the `cart`,
+A great solution would be for the `add_item_to_cart` to always clone the `cart`,
 edit it, and return the clone. This ensures that no other functions that are
 holding onto a reference of the shopping cart will be affected by any changes.
 
@@ -537,24 +537,23 @@ are pretty rare. Most things can be refactored to have no side effects!
 
   2. Cloning big objects can be very expensive in terms of performance. Luckily,
 this isn't a big issue in practice because there are
-[great libraries](https://facebook.github.io/immutable-js/) that allow
+[great gems](https://github.com/hamstergem/hamster) that allow
 this kind of programming approach to be fast and not as memory intensive as
 it would be for you to manually clone objects and arrays.
 
 **Bad:**
-```javascript
-const addItemToCart = (cart, item) => {
-  cart.push({ item, date: Date.now() });
-};
+```ruby
+def add_item_to_cart(cart, item)
+  cart.push({ item: item, time: Time.now })
+end
 ```
 
 **Good:**
-```javascript
-const addItemToCart = (cart, item) => {
-  return [...cart, { item, date: Date.now() }];
-};
+```ruby
+def add_item_to_cart(cart, item)
+  cart + [{ item: item, time: Time.now }]
+end
 ```
-
 **[⬆ back to top](#table-of-contents)**
 
 ### Don't write to global functions
