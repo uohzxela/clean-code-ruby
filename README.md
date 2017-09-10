@@ -441,25 +441,25 @@ end
 Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
 
 **Bad:**
-```javascript
-function createFile(name, temp) {
-  if (temp) {
-    fs.create(`./temp/${name}`);
-  } else {
-    fs.create(name);
-  }
-}
+```ruby
+def create_file(name, temp)
+  if temp
+    fs.create("./temp/#{name}")
+  else
+    fs.create(name)
+  end
+end
 ```
 
 **Good:**
-```javascript
-function createFile(name) {
-  fs.create(name);
-}
+```ruby
+def create_file(name)
+  fs.create(name)
+end
 
-function createTempFile(name) {
-  createFile(`./temp/${name}`);
-}
+def create_temp_file(name)
+  create_file("./temp/#{name}")
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
