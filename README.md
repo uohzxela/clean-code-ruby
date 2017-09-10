@@ -295,7 +295,7 @@ def add_month_to_date(date, month)
   # ...
 end
 
-date = DateTime.new
+date = DateTime.now
 add_month_to_date(date, 1)
 ```
 **[⬆ back to top](#table-of-contents)**
