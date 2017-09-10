@@ -393,8 +393,8 @@ updating multiple places anytime you want to change one thing.
 def show_developer_list(developers)
   developers.each do |developer|
     data = {
-      expected_salary: developer.calculate_expected_salary()
-      experience: developer.get_experience()
+      expected_salary: developer.calculate_expected_salary(),
+      experience: developer.get_experience(),
       github_link: developer.get_github_link()
     }
     
