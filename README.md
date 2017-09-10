@@ -389,62 +389,51 @@ a good abstraction, do it! Don't repeat yourself, otherwise you'll find yourself
 updating multiple places anytime you want to change one thing.
 
 **Bad:**
-```javascript
-function showDeveloperList(developers) {
-  developers.forEach((developer) => {
-    const expectedSalary = developer.calculateExpectedSalary();
-    const experience = developer.getExperience();
-    const githubLink = developer.getGithubLink();
-    const data = {
-      expectedSalary,
-      experience,
-      githubLink
-    };
+```ruby
+def show_developer_list(developers)
+  developers.each do |developer|
+    data = {
+      expected_salary: developer.calculate_expected_salary()
+      experience: developer.get_experience()
+      github_link: developer.get_github_link()
+    }
+    
+    render(data)
+  end
+end
 
-    render(data);
-  });
-}
-
-function showManagerList(managers) {
-  managers.forEach((manager) => {
-    const expectedSalary = manager.calculateExpectedSalary();
-    const experience = manager.getExperience();
-    const portfolio = manager.getMBAProjects();
-    const data = {
-      expectedSalary,
-      experience,
-      portfolio
-    };
-
-    render(data);
-  });
-}
+def show_manager_list(managers)
+  managers.each do |manager|
+    data = {
+      expected_salary: manager.calculate_expected_salary(),
+      experience: manager.get_experience(),
+      portfolio: manager.get_mba_projects()
+    }
+    
+    render(data)
+  end
+end
 ```
 
 **Good:**
-```javascript
-function showEmployeeList(employees) {
-  employees.forEach((employee) => {
-    const expectedSalary = employee.calculateExpectedSalary();
-    const experience = employee.getExperience();
-
-    const data = {
-      expectedSalary,
-      experience
-    };
-
-    switch (employee.type) {
-      case 'manager':
-        data.portfolio = employee.getMBAProjects();
-        break;
-      case 'developer':
-        data.githubLink = employee.getGithubLink();
-        break;
+```ruby
+def show_employee_list(employees)
+  employees.each do |employee|
+    data = {
+      expected_salary: employee.calculate_expected_salary(),
+      experience: employee.get_experience()
     }
 
-    render(data);
-  });
-}
+    case employee.type
+    when 'manager'
+      data.portfolio = employee.get_mba_projects()
+    when 'developer'
+      data.github_link = employee.get_github_link()
+    end
+
+    render(data)
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
