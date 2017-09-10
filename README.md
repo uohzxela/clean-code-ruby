@@ -480,31 +480,31 @@ and not centralizing where your side effects occur. If you can do this, you will
 be happier than the vast majority of other programmers.
 
 **Bad:**
-```javascript
-// Global variable referenced by following function.
-// If we had another function that used this name, now it'd be an array and it could break it.
-let name = 'Ryan McDermott';
+```ruby
+# Global variable referenced by following function.
+# If we had another function that used this name, now it'd be an array and it could break it.
+name = 'Ryan McDermott'
 
-function splitIntoFirstAndLastName() {
-  name = name.split(' ');
-}
+def split_into_first_and_last_name()
+  name = name.split(' ')
+end
 
-splitIntoFirstAndLastName();
+split_into_first_and_last_name()
 
-console.log(name); // ['Ryan', 'McDermott'];
+puts(name) # ['Ryan', 'McDermott']
 ```
 
 **Good:**
-```javascript
-function splitIntoFirstAndLastName(name) {
-  return name.split(' ');
-}
+```ruby
+def split_into_first_and_last_name(name)
+  name.split(' ')
+end
 
-const name = 'Ryan McDermott';
-const newName = splitIntoFirstAndLastName(name);
+name = 'Ryan McDermott'
+new_name = split_into_first_and_last_name(name)
 
-console.log(name); // 'Ryan McDermott';
-console.log(newName); // ['Ryan', 'McDermott'];
+puts(name) # 'Ryan McDermott'
+puts(newName) # ['Ryan', 'McDermott']
 ```
 **[⬆ back to top](#table-of-contents)**
 
