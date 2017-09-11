@@ -644,46 +644,38 @@ total_output = programmer_output
 ### Encapsulate conditionals
 
 **Bad:**
-```javascript
-if (fsm.state === 'fetching' && isEmpty(listNode)) {
-  // ...
-}
+```ruby
+if params[:message].present? && params[:recipient].present?
+  # ...
+end
 ```
 
 **Good:**
-```javascript
-function shouldShowSpinner(fsm, listNode) {
-  return fsm.state === 'fetching' && isEmpty(listNode);
-}
+```ruby
+def should_send_message(params)
+  params[:message].present? && params[:recipient].present?
+end
 
-if (shouldShowSpinner(fsmInstance, listNodeInstance)) {
-  // ...
-}
+if should_send_message(params)
+  # ...
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid negative conditionals
 
 **Bad:**
-```javascript
-function isDOMNodeNotPresent(node) {
-  // ...
-}
-
-if (!isDOMNodeNotPresent(node)) {
-  // ...
-}
+```ruby
+if !genres.blank?
+  # ...
+end
 ```
 
 **Good:**
-```javascript
-function isDOMNodePresent(node) {
-  // ...
-}
-
-if (isDOMNodePresent(node)) {
-  // ...
-}
+```ruby
+if genres.present?
+  # ...
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
