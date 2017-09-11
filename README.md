@@ -690,48 +690,48 @@ are telling your user that your function does more than one thing. Remember,
 just do one thing.
 
 **Bad:**
-```javascript
-class Airplane {
-  // ...
-  getCruisingAltitude() {
-    switch (this.type) {
-      case '777':
-        return this.getMaxAltitude() - this.getPassengerCount();
-      case 'Air Force One':
-        return this.getMaxAltitude();
-      case 'Cessna':
-        return this.getMaxAltitude() - this.getFuelExpenditure();
-    }
-  }
-}
+```ruby
+class Airplane
+  # ...
+  def get_cruising_altitude()
+    case @type
+    when '777'
+      get_max_altitude() - get_passenger_count()
+    when 'Air Force One'
+      get_max_altitude()
+    when 'Cessna'
+      get_max_altitude() - get_fuel_expenditure()
+    end
+  end
+end
 ```
 
 **Good:**
-```javascript
-class Airplane {
-  // ...
-}
+```ruby
+class Airplane
+  # ...
+end
 
-class Boeing777 extends Airplane {
-  // ...
-  getCruisingAltitude() {
-    return this.getMaxAltitude() - this.getPassengerCount();
-  }
-}
+class Boeing777 < Airplane
+  # ...
+  def get_cruising_altitude()
+    get_max_altitude() - get_passenger_count()
+  end
+end
 
-class AirForceOne extends Airplane {
-  // ...
-  getCruisingAltitude() {
-    return this.getMaxAltitude();
-  }
-}
+class AirForceOne < Airplane
+  # ...
+  def get_cruising_altitude()
+    get_max_altitude()
+  end
+end
 
-class Cessna extends Airplane {
-  // ...
-  getCruisingAltitude() {
-    return this.getMaxAltitude() - this.getFuelExpenditure();
-  }
-}
+class Cessna < Airplane
+  # ...
+  def get_cruising_altitude()
+    get_max_altitude() - get_fuel_expenditure()
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
