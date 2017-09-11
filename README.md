@@ -587,57 +587,57 @@ class SuperArray extends Array {
 **[⬆ back to top](#table-of-contents)**
 
 ### Favor functional programming over imperative programming
-JavaScript isn't a functional language in the way that Haskell is, but it has
+Ruby isn't a functional language in the way that Haskell is, but it has
 a functional flavor to it. Functional languages are cleaner and easier to test.
 Favor this style of programming when you can.
 
 **Bad:**
-```javascript
-const programmerOutput = [
+```ruby
+programmer_output = [
   {
     name: 'Uncle Bobby',
-    linesOfCode: 500
+    lines_of_code: 500
   }, {
     name: 'Suzie Q',
-    linesOfCode: 1500
+    lines_of_code: 1500
   }, {
     name: 'Jimmy Gosling',
-    linesOfCode: 150
+    lines_of_code: 150
   }, {
     name: 'Gracie Hopper',
-    linesOfCode: 1000
+    lines_of_code: 1000
   }
-];
+]
 
-let totalOutput = 0;
+total_output = 0
 
-for (let i = 0; i < programmerOutput.length; i++) {
-  totalOutput += programmerOutput[i].linesOfCode;
-}
+programmer_output.each do |output|
+  total_output += output[:lines_of_code]
+end
 ```
 
 **Good:**
-```javascript
-const programmerOutput = [
+```ruby
+programmer_output = [
   {
     name: 'Uncle Bobby',
-    linesOfCode: 500
+    lines_of_code: 500
   }, {
     name: 'Suzie Q',
-    linesOfCode: 1500
+    lines_of_code: 1500
   }, {
     name: 'Jimmy Gosling',
-    linesOfCode: 150
+    lines_of_code: 150
   }, {
     name: 'Gracie Hopper',
-    linesOfCode: 1000
+    lines_of_code: 1000
   }
-];
+]
 
-const INITIAL_VALUE = 0;
+INITIAL_VALUE = 0
 
-const totalOutput = programmerOutput
-  .reduce((acc, { linesOfCode }) => acc + linesOfCode, INITIAL_VALUE);
+total_output = programmer_output
+  .reduce(INITIAL_VALUE) { |acc, output| acc + output[:lines_of_code] }
 ```
 **[⬆ back to top](#table-of-contents)**
 
