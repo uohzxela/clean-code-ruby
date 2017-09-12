@@ -736,27 +736,27 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid type-checking (part 1)
-JavaScript is untyped, which means your functions can take any type of argument.
+Ruby is untyped, which means your functions can take any type of argument.
 Sometimes you are bitten by this freedom and it becomes tempting to do
 type-checking in your functions. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
 
 **Bad:**
-```javascript
-function travelToTexas(vehicle) {
-  if (vehicle instanceof Bicycle) {
-    vehicle.pedal(this.currentLocation, new Location('texas'));
-  } else if (vehicle instanceof Car) {
-    vehicle.drive(this.currentLocation, new Location('texas'));
-  }
-}
+```ruby
+def travel_to_texas(vehicle)
+  if vehicle.is_a?(Bicycle)
+    vehicle.pedal(@current_location, Location.new('texas'))
+  elsif vehicle.is_a?(Car)
+    vehicle.drive(@current_location, Location.new('texas'))
+  end
+end
 ```
 
 **Good:**
-```javascript
-function travelToTexas(vehicle) {
-  vehicle.move(this.currentLocation, new Location('texas'));
-}
+```ruby
+def travel_to_texas(vehicle)
+  vehicle.move(@current_location, Location.new('texas'))
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
