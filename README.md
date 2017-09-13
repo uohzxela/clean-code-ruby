@@ -763,31 +763,28 @@ end
 ### Avoid type-checking (part 2)
 If you are working with basic primitive values like strings and integers,
 and you can't use polymorphism but you still feel the need to type-check,
-you should consider using TypeScript. It is an excellent alternative to normal
-JavaScript, as it provides you with static typing on top of standard JavaScript
-syntax. The problem with manually type-checking normal JavaScript is that
+you should consider using [contracts.ruby](https://github.com/egonSchiele/contracts.ruby). The problem with manually type-checking Ruby is that
 doing it well requires so much extra verbiage that the faux "type-safety" you get
-doesn't make up for the lost readability. Keep your JavaScript clean, write
-good tests, and have good code reviews. Otherwise, do all of that but with
-TypeScript (which, like I said, is a great alternative!).
+doesn't make up for the lost readability. Keep your Ruby clean, write
+good tests, and have good code reviews.
 
 **Bad:**
-```javascript
-function combine(val1, val2) {
-  if (typeof val1 === 'number' && typeof val2 === 'number' ||
-      typeof val1 === 'string' && typeof val2 === 'string') {
-    return val1 + val2;
-  }
+```ruby
+def combine(val1, val2)
+  if (val1.is_a?(Numeric) && val2.is_a?(Numeric) ||
+      val1.is_a?(String) && va2.is_a?(String))
+    val1 + val2
+  end
 
-  throw new Error('Must be of type String or Number');
-}
+  raise 'Must be of type String or Numeric'
+end
 ```
 
 **Good:**
-```javascript
-function combine(val1, val2) {
-  return val1 + val2;
-}
+```ruby
+def combine(val1, val2)
+  val1 + val2
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
