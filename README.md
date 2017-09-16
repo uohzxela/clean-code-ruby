@@ -834,47 +834,86 @@ server.
 
 
 **Bad:**
-```javascript
-function makeBankAccount() {
-  // ...
+```ruby
+def make_bank_account()
+  # ...
 
-  return {
+  {
     balance: 0,
-    // ...
-  };
-}
+    # ...
+  }
+end
 
-const account = makeBankAccount();
-account.balance = 100;
+account = make_bank_account()
+account.balance = 100
+account.balance # => 100
 ```
 
 **Good:**
-```javascript
-function makeBankAccount() {
-  // this one is private
-  let balance = 0;
+```ruby
+class BankAccount
+  def initialize
+    # this one is private
+    @balance = 0
+  end
 
-  // a "getter", made public via the returned object below
-  function getBalance() {
-    return balance;
-  }
+  # a "getter" via a public instance method
+  def balance
+    @balance
+  end
 
-  // a "setter", made public via the returned object below
-  function setBalance(amount) {
-    // ... validate before updating the balance
-    balance = amount;
-  }
+  # a "setter" via a public instance method
+  def balance=(amount)
+    # ... validate before updating the balance
+    @balance = amount
+  end
+end
 
-  return {
-    // ...
-    getBalance,
-    setBalance,
-  };
-}
-
-const account = makeBankAccount();
-account.setBalance(100);
+account = BankAccount.new
+account.balance = 100
+account.balance # => 100
 ```
+
+**Better:**
+```ruby
+class BankAccount
+  attr_accessor :balance
+  
+  def initialize
+    # this one is private
+    @balance = 0
+  end
+end
+
+account = BankAccount.new
+account.balance = 100
+account.balance # => 100
+```
+
+This works because `attr_accessor` is a macro (code that generates other code). In Ruby context, it is a class method that generates instance methods during runtime. More specifically, `attr_accessor` generates getter and setter instance methods.
+
+So this code here:
+
+```ruby
+class Foo
+  attr_accessor :bar
+end
+```
+
+is equivalent to:
+
+```ruby
+class Foo
+  def bar
+    @bar
+  end
+  
+  def bar=(new_value)
+    @bar = new_value
+  end
+end
+```
+
 **[⬆ back to top](#table-of-contents)**
 
 
