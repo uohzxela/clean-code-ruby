@@ -957,81 +957,93 @@ console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
 
 ## **Classes**
 
-### Use method chaining
-This pattern is very useful in JavaScript and you see it in many libraries such
-as jQuery and Lodash. It allows your code to be expressive, and less verbose.
-For that reason, I say, use method chaining and take a look at how clean your code
-will be. In your class functions, simply return `this` at the end of every function,
-and you can chain further class methods onto it.
+### Avoid fluent interfaces
+A [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) is an object
+oriented API that aims to improve the readability of the source code by using
+[method chaining](https://en.wikipedia.org/wiki/Method_chaining).
+
+While there can be some contexts, frequently builder objects, where this
+pattern reduces the verbosity of the code (e.g., ActiveRecord queries),
+more often it comes at some costs:
+
+1. Breaks [Encapsulation](https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29)
+2. Breaks [Decorators](https://en.wikipedia.org/wiki/Decorator_pattern)
+3. Is harder to [mock](https://en.wikipedia.org/wiki/Mock_object) in a test suite
+4. Makes diffs of commits harder to read
+
+For more informations you can read the full [blog post](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
+on this topic written by [Marco Pivetta](https://github.com/Ocramius).
 
 **Bad:**
-```javascript
-class Car {
-  constructor(make, model, color) {
-    this.make = make;
-    this.model = model;
-    this.color = color;
-  }
+```ruby
+class Car
+  def initialize(make, model, color)
+    @make = make
+    @model = model
+    @color = color
+    # NOTE: Returning self for chaining
+    self
+  end
 
-  setMake(make) {
-    this.make = make;
-  }
+  def set_make(make)
+    @make = make
+    # NOTE: Returning self for chaining
+    self
+  end
 
-  setModel(model) {
-    this.model = model;
-  }
+  def set_model(model)
+    @model = model
+    # NOTE: Returning self for chaining
+    self
+  end
 
-  setColor(color) {
-    this.color = color;
-  }
+  def set_color(color)
+    @color = color
+    # NOTE: Returning self for chaining
+    self
+  end
 
-  save() {
-    console.log(this.make, this.model, this.color);
-  }
-}
+  def save()
+    # save object...
+    # NOTE: Returning self for chaining
+    self
+  end
+end
 
-const car = new Car('Ford','F-150','red');
-car.setColor('pink');
-car.save();
+car = Car.new('Ford','F-150','red')
+  .set_color('pink')
+  .save()
 ```
 
 **Good:**
-```javascript
-class Car {
-  constructor(make, model, color) {
-    this.make = make;
-    this.model = model;
-    this.color = color;
-  }
+```ruby
+class Car
+  def initialize(make, model, color)
+    @make = make
+    @model = model
+    @color = color
+  end
 
-  setMake(make) {
-    this.make = make;
-    // NOTE: Returning this for chaining
-    return this;
-  }
+  def set_make(make)
+    @make = make
+  end
 
-  setModel(model) {
-    this.model = model;
-    // NOTE: Returning this for chaining
-    return this;
-  }
+  def set_model(model)
+    @model = model
+  end
 
-  setColor(color) {
-    this.color = color;
-    // NOTE: Returning this for chaining
-    return this;
-  }
+  def set_color(color)
+    @color = color
+  end
 
-  save() {
-    console.log(this.make, this.model, this.color);
-    // NOTE: Returning this for chaining
-    return this;
-  }
-}
+  def save()
+    # Save object...
+  end
+end
 
-const car = new Car('Ford','F-150','red')
-  .setColor('pink')
-  .save();
+car = Car.new('Ford','F-150','red')
+car.set_color('pink')
+car.save()
 ```
 **[⬆ back to top](#table-of-contents)**
 
