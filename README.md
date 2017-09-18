@@ -858,61 +858,23 @@ class BankAccount
   end
 
   # a "getter" via a public instance method
-  def balance
+  def get_balance()
     @balance
   end
 
   # a "setter" via a public instance method
-  def balance=(amount)
+  def set_balance(amount)
     # ... validate before updating the balance
     @balance = amount
   end
 end
 
 account = BankAccount.new
-account.balance = 100
-account.balance # => 100
+account.set_balance(100)
+account.get_balance() # => 100
 ```
 
-**Better:**
-```ruby
-class BankAccount
-  attr_accessor :balance
-  
-  def initialize
-    # this one is private
-    @balance = 0
-  end
-end
-
-account = BankAccount.new
-account.balance = 100
-account.balance # => 100
-```
-
-This works because `attr_accessor` is a macro (code that generates other code). In Ruby context, it is a class method that generates instance methods during runtime. More specifically, `attr_accessor` generates getter and setter instance methods.
-
-So this code here:
-
-```ruby
-class Foo
-  attr_accessor :bar
-end
-```
-
-is equivalent to:
-
-```ruby
-class Foo
-  def bar
-    @bar
-  end
-  
-  def bar=(new_value)
-    @bar = new_value
-  end
-end
-```
+Also, don't be tempted to use `attr_accessor` for its convenient generation of getters and setters. Unless you are implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers from remote API), using attribute accessors is a code smell. Read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
 **[⬆ back to top](#table-of-contents)**
 
