@@ -874,7 +874,7 @@ account.set_balance(100)
 account.get_balance() # => 100
 ```
 
-Also, don't be tempted to use `attr_accessor` for its convenient generation of getters and setters. Unless you are implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers from remote API), using attribute accessors is a code smell. Read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
+Also, don't be tempted to use `attr_accessor` for its convenient generation of getters and setters. Unless you are implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs), using attribute accessors is a code smell. Read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1028,50 +1028,50 @@ relationship (Human->Animal vs. User->UserDetails).
 (Change the caloric expenditure of all animals when they move).
 
 **Bad:**
-```javascript
-class Employee {
-  constructor(name, email) {
-    this.name = name;
-    this.email = email;
-  }
+```ruby
+class Employee
+  def initialize(name, email)
+    @name = name
+    @email = email
+  end
 
-  // ...
-}
+  # ...
+end
 
-// Bad because Employees "have" tax data. EmployeeTaxData is not a type of Employee
-class EmployeeTaxData extends Employee {
-  constructor(ssn, salary) {
-    super();
-    this.ssn = ssn;
-    this.salary = salary;
-  }
+# Bad because Employees "have" tax data. EmployeeTaxData is not a type of Employee
+class EmployeeTaxData < Employee
+  def initialize(ssn, salary)
+    super()
+    @ssn = ssn
+    @salary = salary
+  end
 
-  // ...
-}
+  # ...
+end
 ```
 
 **Good:**
-```javascript
-class EmployeeTaxData {
-  constructor(ssn, salary) {
-    this.ssn = ssn;
-    this.salary = salary;
-  }
+```ruby
+class EmployeeTaxData
+  def initialize(ssn, salary)
+    @ssn = ssn
+    @salary = salary
+  end
 
-  // ...
-}
+  # ...
+end
 
-class Employee {
-  constructor(name, email) {
+class Employee
+  def initialize(name, email)
     this.name = name;
     this.email = email;
-  }
+  end
 
-  setTaxData(ssn, salary) {
-    this.taxData = new EmployeeTaxData(ssn, salary);
-  }
-  // ...
-}
+  def set_tax_data(ssn, salary)
+    @tax_data = EmployeeTaxData.new(ssn, salary)
+  end
+  # ...
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
