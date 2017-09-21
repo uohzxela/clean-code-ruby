@@ -1140,83 +1140,85 @@ mean though? This principle basically states that you should allow users to
 add new functionalities without changing existing code.
 
 **Bad:**
-```javascript
-class AjaxAdapter extends Adapter {
-  constructor() {
-    super();
-    this.name = 'ajaxAdapter';
-  }
-}
+```ruby
+class Adapter
+  def get_name()
+    @name
+  end
+end
 
-class NodeAdapter extends Adapter {
-  constructor() {
-    super();
-    this.name = 'nodeAdapter';
-  }
-}
+class AjaxAdapter < Adapter
+  def initialize()
+    super()
+    @name = 'ajaxAdapter'
+  end
+end
 
-class HttpRequester {
-  constructor(adapter) {
-    this.adapter = adapter;
-  }
+class NodeAdapter < Adapter
+  def initialize()
+    super()
+    @name = 'nodeAdapter'
+  end
+end
 
-  fetch(url) {
-    if (this.adapter.name === 'ajaxAdapter') {
-      return makeAjaxCall(url).then((response) => {
-        // transform response and return
-      });
-    } else if (this.adapter.name === 'httpNodeAdapter') {
-      return makeHttpCall(url).then((response) => {
-        // transform response and return
-      });
-    }
-  }
-}
+class HttpRequester
+  def initialize(adapter)
+    @adapter = adapter
+  end
 
-function makeAjaxCall(url) {
-  // request and return promise
-}
-
-function makeHttpCall(url) {
-  // request and return promise
-}
+  def fetch(url)
+    adapter_name = @adapter.get_name()
+    
+    if adapter_name == 'ajaxAdapter'
+      make_ajax_call(url)
+    elsif adapter_name == 'httpNodeAdapter'
+      make_http_call(url)
+    end
+  end
+  
+  def make_ajax_call(url)
+    # ...
+  end
+  
+  def make_http_call(url)
+    # ...
+  end
+end
 ```
 
 **Good:**
-```javascript
-class AjaxAdapter extends Adapter {
-  constructor() {
-    super();
-    this.name = 'ajaxAdapter';
-  }
+```ruby
+class AjaxAdapter < Adapter
+  def initialize()
+    super()
+    @name = 'ajaxAdapter'
+  end
 
-  request(url) {
-    // request and return promise
-  }
-}
+  def request(url)
+    # ...
+  end
+end
 
-class NodeAdapter extends Adapter {
-  constructor() {
-    super();
-    this.name = 'nodeAdapter';
-  }
+class NodeAdapter < Adapter
+  def initialize()
+    super()
+    @name = 'nodeAdapter'
+  end
 
-  request(url) {
-    // request and return promise
-  }
-}
+  def request(url)
+    # ...
+  end
+end
 
 class HttpRequester {
-  constructor(adapter) {
-    this.adapter = adapter;
-  }
+  def initialize(adapter)
+    @adapter = adapter
+  end
 
-  fetch(url) {
-    return this.adapter.request(url).then((response) => {
-      // transform response and return
-    });
-  }
-}
+  def fetch(url)
+    @adapter.request(url)
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
