@@ -1087,49 +1087,49 @@ a piece of it, it can be difficult to understand how that will affect other
 dependent modules in your codebase.
 
 **Bad:**
-```javascript
-class UserSettings {
-  constructor(user) {
-    this.user = user;
-  }
+```ruby
+class UserSettings
+  def initialize(user)
+    @user = user
+  end
 
-  changeSettings(settings) {
-    if (this.verifyCredentials()) {
-      // ...
-    }
-  }
+  def change_settings(settings)
+    if verify_credentials()
+      # ...
+    end
+  end
 
-  verifyCredentials() {
-    // ...
-  }
-}
+  def verify_credentials()
+    # ...
+  end
+end
 ```
 
 **Good:**
-```javascript
-class UserAuth {
-  constructor(user) {
-    this.user = user;
-  }
+```ruby
+class UserAuth
+  def initialize(user)
+    @user = user
+  end
 
-  verifyCredentials() {
-    // ...
-  }
-}
+  def verify_credentials()
+    # ...
+  end
+end
 
 
-class UserSettings {
-  constructor(user) {
-    this.user = user;
-    this.auth = new UserAuth(user);
-  }
+class UserSettings
+  def initialize(user)
+    @user = user
+    @auth = UserAuth.new(user)
+  end
 
-  changeSettings(settings) {
-    if (this.auth.verifyCredentials()) {
-      // ...
-    }
-  }
-}
+  def change_settings(settings)
+    if @auth.verify_credentials()
+      # ...
+    end
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
