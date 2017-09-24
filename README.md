@@ -1237,103 +1237,103 @@ if you model it using the "is-a" relationship via inheritance, you quickly
 get into trouble.
 
 **Bad:**
-```javascript
-class Rectangle {
-  constructor() {
-    this.width = 0;
-    this.height = 0;
-  }
+```ruby
+class Rectangle
+  def initialize()
+    @width = 0
+    @height = 0
+  end
 
-  setColor(color) {
-    // ...
-  }
+  def set_color(color)
+    # ...
+  end
 
-  render(area) {
-    // ...
-  }
+  def render(area)
+    # ...
+  end
 
-  setWidth(width) {
-    this.width = width;
-  }
+  def set_width(width)
+    @width = width
+  end
 
-  setHeight(height) {
-    this.height = height;
-  }
+  def set_height(height)
+    @height = height
+  end
 
-  getArea() {
-    return this.width * this.height;
-  }
-}
+  def get_area()
+    @width * @height
+  end
+end
 
-class Square extends Rectangle {
-  setWidth(width) {
-    this.width = width;
-    this.height = width;
-  }
+class Square < Rectangle
+  def set_width(width)
+    @width = width
+    @height = width
+  end
 
-  setHeight(height) {
-    this.width = height;
-    this.height = height;
-  }
-}
+  def set_height(height)
+    @width = height
+    @height = height
+  end
+end
 
-function renderLargeRectangles(rectangles) {
-  rectangles.forEach((rectangle) => {
-    rectangle.setWidth(4);
-    rectangle.setHeight(5);
-    const area = rectangle.getArea(); // BAD: Returns 25 for Square. Should be 20.
-    rectangle.render(area);
-  });
-}
+def render_large_rectangles(rectangles)
+  rectangles.each do |rectangle|
+    rectangle.set_width(4)
+    rectangle.set_height(5)
+    area = rectangle.get_area() # BAD: Returns 25 for Square. Should be 20.
+    rectangle.render(area)
+  end
+end
 
-const rectangles = [new Rectangle(), new Rectangle(), new Square()];
-renderLargeRectangles(rectangles);
+rectangles = [Rectangle.new, Rectangle.new, Square.new]
+render_large_rectangles(rectangles)
 ```
 
 **Good:**
-```javascript
-class Shape {
-  setColor(color) {
-    // ...
-  }
+```ruby
+class Shape
+  def set_color(color)
+    # ...
+  end
 
-  render(area) {
-    // ...
-  }
+  def render(area)
+    # ...
+  end
+end
+
+class Rectangle < Shape
+  def initialize(width, height)
+    super()
+    @width = width
+    @height = height
+  end
+
+  def get_area()
+    @width * @height
+  end
+end
+
+class Square < Shape
+  def initialize(length)
+    super()
+    @length = length
+  end
+
+  def get_area()
+    @length * @length
+  end
 }
 
-class Rectangle extends Shape {
-  constructor(width, height) {
-    super();
-    this.width = width;
-    this.height = height;
-  }
+def render_large_shapes(shapes)
+  shapes.each do |shape|
+    area = shape.get_area()
+    shape.render(area)
+  end
+end
 
-  getArea() {
-    return this.width * this.height;
-  }
-}
-
-class Square extends Shape {
-  constructor(length) {
-    super();
-    this.length = length;
-  }
-
-  getArea() {
-    return this.length * this.length;
-  }
-}
-
-function renderLargeShapes(shapes) {
-  shapes.forEach((shape) => {
-    const area = shape.getArea();
-    shape.render(area);
-  });
-}
-
-const shapes = [new Rectangle(4, 5), new Rectangle(4, 5), new Square(5)];
-renderLargeShapes(shapes);
+shapes = [Rectangle.new(4, 5), Rectangle.new(4, 5), Square.new(5)]
+render_large_shapes(shapes)
 ```
 **[⬆ back to top](#table-of-contents)**
 
