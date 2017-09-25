@@ -1338,78 +1338,80 @@ render_large_shapes(shapes)
 **[⬆ back to top](#table-of-contents)**
 
 ### Interface Segregation Principle (ISP)
-JavaScript doesn't have interfaces so this principle doesn't apply as strictly
-as others. However, it's important and relevant even with JavaScript's lack of
+Ruby doesn't have interfaces so this principle doesn't apply as strictly
+as others. However, it's important and relevant even with Ruby's lack of
 type system.
 
 ISP states that "Clients should not be forced to depend upon interfaces that
-they do not use." Interfaces are implicit contracts in JavaScript because of
+they do not use." Interfaces are implicit contracts in Ruby because of
 duck typing.
 
-A good example to look at that demonstrates this principle in JavaScript is for
-classes that require large settings objects. Not requiring clients to setup
-huge amounts of options is beneficial, because most of the time they won't need
-all of the settings. Making them optional helps prevent having a
-"fat interface".
+When a client depends upon a class that contains interfaces that the client does not use, but that other clients do use, then that client will be affected by the changes that those other clients force upon the class. 
+
+The following example is taken from [here](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
 
 **Bad:**
-```javascript
-class DOMTraverser {
-  constructor(settings) {
-    this.settings = settings;
-    this.setup();
-  }
+```ruby
+class Car
+  # used by Driver
+  def open
+  end
+  
+  # used by Driver
+  def start_engine
+  end
+  
+  # used by Mechanic
+  def change_engine
+  end
+end
 
-  setup() {
-    this.rootNode = this.settings.rootNode;
-    this.animationModule.setup();
-  }
+class Driver
+  def drive
+    @car.open
+    @car.start_engine
+  end
+end
 
-  traverse() {
-    // ...
-  }
-}
-
-const $ = new DOMTraverser({
-  rootNode: document.getElementsByTagName('body'),
-  animationModule() {} // Most of the time, we won't need to animate when traversing.
-  // ...
-});
+class Mechanic
+  def do_stuff
+    @car.change_engine
+  end
+end
 
 ```
 
 **Good:**
-```javascript
-class DOMTraverser {
-  constructor(settings) {
-    this.settings = settings;
-    this.options = settings.options;
-    this.setup();
-  }
+```ruby
+# used by Driver only
+class Car
+  def open
+  end
 
-  setup() {
-    this.rootNode = this.settings.rootNode;
-    this.setupOptions();
-  }
+  def start_engine
+  end
+end
 
-  setupOptions() {
-    if (this.options.animationModule) {
-      // ...
-    }
-  }
+# used by Mechanic only
+class CarInternals
+  def change_engine
+  end
+end
 
-  traverse() {
-    // ...
-  }
-}
+class Driver
+  def drive
+    @car.open
+    @car.start_engine
+  end
+end
 
-const $ = new DOMTraverser({
-  rootNode: document.getElementsByTagName('body'),
-  options: {
-    animationModule() {}
-  }
-});
+class Mechanic
+  def do_stuff
+    @car_internals.change_engine
+  end
+end
 ```
+
 **[⬆ back to top](#table-of-contents)**
 
 ### Dependency Inversion Principle (DIP)
