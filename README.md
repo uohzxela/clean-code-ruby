@@ -81,9 +81,9 @@ Make your names searchable.
 **Bad:**
 ```ruby
 # What the heck is 86400 for?
-status = Timeout::timeout(86400) {
+status = Timeout::timeout(86400) do
   # ...
-}
+end
 ```
 
 **Good:**
@@ -91,9 +91,9 @@ status = Timeout::timeout(86400) {
 # Declare them as capitalized globals.
 SECONDS_IN_A_DAY = 86400
 
-status = Timeout::timeout(SECONDS_IN_A_DAY) {
+status = Timeout::timeout(SECONDS_IN_A_DAY) do
   # ...
-}
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -485,7 +485,7 @@ be happier than the vast majority of other programmers.
 # If we had another function that used this name, now it'd be an array and it could break it.
 name = 'Ryan McDermott'
 
-def split_into_first_and_last_name()
+def split_into_first_and_last_name
   name = name.split(' ')
 end
 
@@ -553,36 +553,6 @@ end
 def add_item_to_cart(cart, item)
   cart + [{ item: item, time: Time.now }]
 end
-```
-**[⬆ back to top](#table-of-contents)**
-
-### Don't write to global functions
-Polluting globals is a bad practice in JavaScript because you could clash with another
-library and the user of your API would be none-the-wiser until they get an
-exception in production. Let's think about an example: what if you wanted to
-extend JavaScript's native Array method to have a `diff` method that could
-show the difference between two arrays? You could write your new function
-to the `Array.prototype`, but it could clash with another library that tried
-to do the same thing. What if that other library was just using `diff` to find
-the difference between the first and last elements of an array? This is why it
-would be much better to just use ES2015/ES6 classes and simply extend the `Array` global.
-
-**Bad:**
-```javascript
-Array.prototype.diff = function diff(comparisonArray) {
-  const hash = new Set(comparisonArray);
-  return this.filter(elem => !hash.has(elem));
-};
-```
-
-**Good:**
-```javascript
-class SuperArray extends Array {
-  diff(comparisonArray) {
-    const hash = new Set(comparisonArray);
-    return this.filter(elem => !hash.has(elem));
-  }
-}
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -693,7 +663,7 @@ just do one thing.
 ```ruby
 class Airplane
   # ...
-  def get_cruising_altitude()
+  def get_cruising_altitude
     case @type
     when '777'
       get_max_altitude() - get_passenger_count()
@@ -714,21 +684,21 @@ end
 
 class Boeing777 < Airplane
   # ...
-  def get_cruising_altitude()
+  def get_cruising_altitude
     get_max_altitude() - get_passenger_count()
   end
 end
 
 class AirForceOne < Airplane
   # ...
-  def get_cruising_altitude()
+  def get_cruising_altitude
     get_max_altitude()
   end
 end
 
 class Cessna < Airplane
   # ...
-  def get_cruising_altitude()
+  def get_cruising_altitude
     get_max_altitude() - get_fuel_expenditure()
   end
 end
@@ -771,8 +741,8 @@ good tests, and have good code reviews.
 **Bad:**
 ```ruby
 def combine(val1, val2)
-  if (val1.is_a?(Numeric) && val2.is_a?(Numeric) ||
-      val1.is_a?(String) && va2.is_a?(String))
+  if (val1.is_a?(Numeric) && val2.is_a?(Numeric)) ||
+     (val1.is_a?(String) && va2.is_a?(String))
     val1 + val2
   end
 
@@ -858,7 +828,7 @@ class BankAccount
   end
 
   # a "getter" via a public instance method
-  def get_balance()
+  def get_balance
     @balance
   end
 
@@ -876,44 +846,6 @@ account.get_balance() # => 100
 
 Also, don't be tempted to use `attr_accessor` for its convenient generation of getters and setters. Unless you are implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs), using attribute accessors is a code smell. Read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
-**[⬆ back to top](#table-of-contents)**
-
-
-### Make objects have private members
-This can be accomplished through closures (for ES5 and below).
-
-**Bad:**
-```javascript
-
-const Employee = function(name) {
-  this.name = name;
-};
-
-Employee.prototype.getName = function getName() {
-  return this.name;
-};
-
-const employee = new Employee('John Doe');
-console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
-delete employee.name;
-console.log(`Employee name: ${employee.getName()}`); // Employee name: undefined
-```
-
-**Good:**
-```javascript
-function makeEmployee(name) {
-  return {
-    getName() {
-      return name;
-    },
-  };
-}
-
-const employee = makeEmployee('John Doe');
-console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
-delete employee.name;
-console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
-```
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -965,7 +897,7 @@ class Car
     self
   end
 
-  def save()
+  def save
     # save object...
     # NOTE: Returning self for chaining
     self
@@ -998,7 +930,7 @@ class Car
     @color = color
   end
 
-  def save()
+  def save
     # Save object...
   end
 end
@@ -1099,7 +1031,7 @@ class UserSettings
     end
   end
 
-  def verify_credentials()
+  def verify_credentials
     # ...
   end
 end
@@ -1112,7 +1044,7 @@ class UserAuth
     @user = user
   end
 
-  def verify_credentials()
+  def verify_credentials
     # ...
   end
 end
@@ -1142,20 +1074,20 @@ add new functionalities without changing existing code.
 **Bad:**
 ```ruby
 class Adapter
-  def get_name()
+  def get_name
     @name
   end
 end
 
 class AjaxAdapter < Adapter
-  def initialize()
+  def initialize
     super()
     @name = 'ajaxAdapter'
   end
 end
 
 class NodeAdapter < Adapter
-  def initialize()
+  def initialize
     super()
     @name = 'nodeAdapter'
   end
@@ -1189,7 +1121,7 @@ end
 **Good:**
 ```ruby
 class AjaxAdapter < Adapter
-  def initialize()
+  def initialize
     super()
     @name = 'ajaxAdapter'
   end
@@ -1200,7 +1132,7 @@ class AjaxAdapter < Adapter
 end
 
 class NodeAdapter < Adapter
-  def initialize()
+  def initialize
     super()
     @name = 'nodeAdapter'
   end
@@ -1239,7 +1171,7 @@ get into trouble.
 **Bad:**
 ```ruby
 class Rectangle
-  def initialize()
+  def initialize
     @width = 0
     @height = 0
   end
@@ -1260,7 +1192,7 @@ class Rectangle
     @height = height
   end
 
-  def get_area()
+  def get_area
     @width * @height
   end
 end
@@ -1309,7 +1241,7 @@ class Rectangle < Shape
     @height = height
   end
 
-  def get_area()
+  def get_area
     @width * @height
   end
 end
@@ -1320,7 +1252,7 @@ class Square < Shape
     @length = length
   end
 
-  def get_area()
+  def get_area
     @length * @length
   end
 }
