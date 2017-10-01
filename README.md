@@ -1505,70 +1505,47 @@ end
 Thrown errors are a good thing! They mean the runtime has successfully
 identified when something in your program has gone wrong and it's letting
 you know by stopping function execution on the current stack, killing the
-process (in Node), and notifying you in the console with a stack trace.
+process, and notifying you in the logs with a stack trace.
 
 ### Don't ignore caught errors
 Doing nothing with a caught error doesn't give you the ability to ever fix
-or react to said error. Logging the error to the console (`console.log`)
-isn't much better as often times it can get lost in a sea of things printed
-to the console. If you wrap any bit of code in a `try/catch` it means you
+or react to said error. Logging the error
+isn't much better as often times it can get lost in a sea of other logs. If you wrap any bit of code in a `begin/rescue` it means you
 think an error may occur there and therefore you should have a plan,
 or create a code path, for when it occurs.
 
 **Bad:**
-```javascript
-try {
-  functionThatMightThrow();
-} catch (error) {
-  console.log(error);
-}
+```ruby
+require 'logger'
+
+logger = Logger.new(STDOUT)
+
+begin
+  function_that_might_throw()
+rescue => err
+  logger.info(err)
+end
 ```
 
 **Good:**
-```javascript
-try {
-  functionThatMightThrow();
-} catch (error) {
-  // One option (more noisy than console.log):
-  console.error(error);
-  // Another option:
-  notifyUserOfError(error);
-  // Another option:
-  reportErrorToService(error);
-  // OR do all three!
-}
-```
+```ruby
+require 'logger'
 
-### Don't ignore rejected promises
-For the same reason you shouldn't ignore caught errors
-from `try/catch`.
+logger = Logger.new(STDOUT)
+# Change the logger level to ERROR to output only logs with ERROR level and above
+logger.level = Logger::ERROR
 
-**Bad:**
-```javascript
-getdata()
-  .then((data) => {
-    functionThatMightThrow(data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-```
-
-**Good:**
-```javascript
-getdata()
-  .then((data) => {
-    functionThatMightThrow(data);
-  })
-  .catch((error) => {
-    // One option (more noisy than console.log):
-    console.error(error);
-    // Another option:
-    notifyUserOfError(error);
-    // Another option:
-    reportErrorToService(error);
-    // OR do all three!
-  });
+begin
+  function_that_might_throw()
+rescue => err
+  # Option 1: Only log errors
+  logger.error(err)
+  # Option 2: Notify end-user via an interface
+  notify_user_of_error(err)
+  # Option 3: Report error to a third-party service like Honeybadger
+  report_error_to_service(err)
+  # OR do all three!
+end
 ```
 
 **[⬆ back to top](#table-of-contents)**
