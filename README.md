@@ -1445,10 +1445,10 @@ didn't break anything. Deciding on what constitutes an adequate amount is up
 to your team, but having 100% coverage (all statements and branches) is how
 you achieve very high confidence and developer peace of mind. This means that
 in addition to having a great testing framework, you also need to use a
-[good coverage tool](http://gotwarlost.github.io/istanbul/).
+[good coverage tool](https://coveralls.io/).
 
-There's no excuse to not write tests. There's [plenty of good JS test frameworks](http://jstherightway.org/#testing-tools), so find one that your team prefers.
-When you find one that works for your team, then aim to always write tests
+There's no excuse to not write tests. Ruby comes with its own testing tool (RSpec) built right in.
+Aim to always write tests
 for every new feature/module you introduce. If your preferred method is
 Test Driven Development (TDD), that is great, but the main point is to just
 make sure you are reaching your coverage goals before launching any feature,
@@ -1457,51 +1457,47 @@ or refactoring an existing one.
 ### Single concept per test
 
 **Bad:**
-```javascript
-import assert from 'assert';
+```ruby
+require 'rspec'
 
-describe('MakeMomentJSGreatAgain', () => {
-  it('handles date boundaries', () => {
-    let date;
-
-    date = new MakeMomentJSGreatAgain('1/1/2015');
-    date.addDays(30);
-    assert.equal('1/31/2015', date);
-
-    date = new MakeMomentJSGreatAgain('2/1/2016');
-    date.addDays(28);
-    assert.equal('02/29/2016', date);
-
-    date = new MakeMomentJSGreatAgain('2/1/2015');
-    date.addDays(28);
-    assert.equal('03/01/2015', date);
-  });
-});
+describe 'Calculator' do
+  let(:calculator) { Calculator.new }
+  
+  it 'performs addition, subtraction, multiplication and division' do
+    expect(calculator.calculate('1 + 2')).to eq(3)
+    
+    expect(calculator.calculate('4 - 2')).to eq(2)
+    
+    expect(calculator.calculate('2 * 3')).to eq(6)
+    
+    expect(calculator.calculate('6 / 2')).to eq(3)
+  end
+end
 ```
 
 **Good:**
-```javascript
-import assert from 'assert';
+```ruby
+require 'rspec'
 
-describe('MakeMomentJSGreatAgain', () => {
-  it('handles 30-day months', () => {
-    const date = new MakeMomentJSGreatAgain('1/1/2015');
-    date.addDays(30);
-    assert.equal('1/31/2015', date);
-  });
-
-  it('handles leap year', () => {
-    const date = new MakeMomentJSGreatAgain('2/1/2016');
-    date.addDays(28);
-    assert.equal('02/29/2016', date);
-  });
-
-  it('handles non-leap year', () => {
-    const date = new MakeMomentJSGreatAgain('2/1/2015');
-    date.addDays(28);
-    assert.equal('03/01/2015', date);
-  });
-});
+describe 'Calculator' do
+  let(:calculator) { Calculator.new }
+  
+  it 'performs addition' do
+    expect(calculator.calculate('1 + 2')).to eq(3)
+  end
+  
+  it 'performs subtraction' do
+    expect(calculator.calculate('4 - 2')).to eq(2)
+  end
+  
+  it 'performs multiplication' do
+    expect(calculator.calculate('2 * 3')).to eq(6)
+  end
+  
+  it 'performs division' do
+    expect(calculator.calculate('6 / 2')).to eq(3)
+  end
+end
 ```
 **[⬆ back to top](#table-of-contents)**
 
