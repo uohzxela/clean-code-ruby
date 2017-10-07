@@ -1554,7 +1554,7 @@ end
 ## **Formatting**
 Formatting is subjective. Like many rules herein, there is no hard and fast
 rule that you must follow. The main point is DO NOT ARGUE over formatting.
-There are [tons of tools](http://standardjs.com/rules.html) to automate this.
+There are tons of tools to automate this.
 Use one! It's a waste of time and money for engineers to argue over formatting.
 
 For things that don't fall under the purview of automatic formatting
@@ -1562,38 +1562,38 @@ For things that don't fall under the purview of automatic formatting
 for some guidance.
 
 ### Use consistent capitalization
-JavaScript is untyped, so capitalization tells you a lot about your variables,
+Ruby is untyped, so capitalization tells you a lot about your variables,
 functions, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
 
 **Bad:**
-```javascript
-const DAYS_IN_WEEK = 7;
-const daysInMonth = 30;
+```ruby
+DAYS_IN_WEEK = 7
+daysInMonth = 30
 
-const songs = ['Back In Black', 'Stairway to Heaven', 'Hey Jude'];
-const Artists = ['ACDC', 'Led Zeppelin', 'The Beatles'];
+songs = ['Back In Black', 'Stairway to Heaven', 'Hey Jude']
+Artists = ['ACDC', 'Led Zeppelin', 'The Beatles']
 
-function eraseDatabase() {}
-function restore_database() {}
+def eraseDatabase ; end
+def restore_database ; end
 
-class animal {}
-class Alpaca {}
+class ANIMAL ; end
+class Alpaca ; end
 ```
 
 **Good:**
-```javascript
-const DAYS_IN_WEEK = 7;
-const DAYS_IN_MONTH = 30;
+```ruby
+DAYS_IN_WEEK = 7
+DAYS_IN_MONTH = 30
 
-const SONGS = ['Back In Black', 'Stairway to Heaven', 'Hey Jude'];
-const ARTISTS = ['ACDC', 'Led Zeppelin', 'The Beatles'];
+SONGS = ['Back In Black', 'Stairway to Heaven', 'Hey Jude']
+ARTISTS = ['ACDC', 'Led Zeppelin', 'The Beatles']
 
-function eraseDatabase() {}
-function restoreDatabase() {}
+def erase_database ; end
+def restore_database ; end
 
-class Animal {}
-class Alpaca {}
+class Animal ; end
+class Alpaca ; end
 ```
 **[⬆ back to top](#table-of-contents)**
 
