@@ -1604,81 +1604,83 @@ file. Ideally, keep the caller right above the callee. We tend to read code from
 top-to-bottom, like a newspaper. Because of this, make your code read that way.
 
 **Bad:**
-```javascript
-class PerformanceReview {
-  constructor(employee) {
-    this.employee = employee;
-  }
+```ruby
+class PerformanceReview
+  def initialize(employee)
+    @employee = employee
+  end
 
-  lookupPeers() {
-    return db.lookup(this.employee, 'peers');
-  }
+  def lookup_peers
+    db.lookup(@employee, 'peers')
+  end
 
-  lookupManager() {
-    return db.lookup(this.employee, 'manager');
-  }
+  def lookup_manager
+    db.lookup(@employee, 'manager')
+  end
 
-  getPeerReviews() {
-    const peers = this.lookupPeers();
-    // ...
-  }
+  def get_peer_reviews
+    peers = lookup_peers()
+    # ...
+  end
 
-  perfReview() {
-    this.getPeerReviews();
-    this.getManagerReview();
-    this.getSelfReview();
-  }
+  def perf_review
+    get_peer_reviews()
+    get_manager_review()
+    get_self_review()
+  end
 
-  getManagerReview() {
-    const manager = this.lookupManager();
-  }
+  def get_manager_review
+    manager = lookup_manager()
+    # ...
+  end
 
-  getSelfReview() {
-    // ...
-  }
-}
+  def get_self_review
+    # ...
+  end
+end
 
-const review = new PerformanceReview(employee);
-review.perfReview();
+review = PerformanceReview.new(employee)
+review.perf_review()
 ```
 
 **Good:**
-```javascript
-class PerformanceReview {
-  constructor(employee) {
-    this.employee = employee;
-  }
+```ruby
+class PerformanceReview
+  def initialize(employee)
+    @employee = employee
+  end
 
-  perfReview() {
-    this.getPeerReviews();
-    this.getManagerReview();
-    this.getSelfReview();
-  }
+  def perf_review
+    get_peer_reviews()
+    get_manager_review()
+    get_self_review()
+  end
 
-  getPeerReviews() {
-    const peers = this.lookupPeers();
-    // ...
-  }
+  def get_peer_reviews
+    peers = lookup_peers()
+    # ...
+  end
 
-  lookupPeers() {
-    return db.lookup(this.employee, 'peers');
-  }
+  def lookup_peers
+    db.lookup(@employee, 'peers')
+  end
+  
+  def get_manager_review
+    manager = lookup_manager()
+    # ...
+  end
 
-  getManagerReview() {
-    const manager = this.lookupManager();
-  }
+  def lookup_manager
+    db.lookup(@employee, 'manager')
+  end
 
-  lookupManager() {
-    return db.lookup(this.employee, 'manager');
-  }
+  def get_self_review
+    # ...
+  end
+end
 
-  getSelfReview() {
-    // ...
-  }
-}
-
-const review = new PerformanceReview(employee);
-review.perfReview();
+review = PerformanceReview.new(employee)
+review.perf_review()
 ```
 
 **[⬆ back to top](#table-of-contents)**
