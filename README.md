@@ -1733,16 +1733,16 @@ function hashIt(data) {
 Version control exists for a reason. Leave old code in your history.
 
 **Bad:**
-```javascript
-doStuff();
-// doOtherStuff();
-// doSomeMoreStuff();
-// doSoMuchStuff();
+```ruby
+do_stuff()
+# do_other_stuff()
+# do_some_more_stuff()
+# do_so_much_stuff()
 ```
 
 **Good:**
-```javascript
-doStuff();
+```ruby
+do_stuff()
 ```
 **[⬆ back to top](#table-of-contents)**
 
