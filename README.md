@@ -10,11 +10,9 @@ Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-
   5. [Classes](#classes)
   6. [SOLID](#solid)
   7. [Testing](#testing)
-  8. [Concurrency](#concurrency)
   9. [Error Handling](#error-handling)
   10. [Formatting](#formatting)
   11. [Comments](#comments)
-  12. [Translation](#translation)
 
 ## Introduction
 ![Humorous image of software quality estimation as a count of how many expletives
@@ -1686,48 +1684,7 @@ review.perf_review()
 **[⬆ back to top](#table-of-contents)**
 
 ## **Comments**
-### Only comment things that have business logic complexity.
-Comments are an apology, not a requirement. Good code *mostly* documents itself.
 
-**Bad:**
-```javascript
-function hashIt(data) {
-  // The hash
-  let hash = 0;
-
-  // Length of string
-  const length = data.length;
-
-  // Loop through every character in data
-  for (let i = 0; i < length; i++) {
-    // Get character code.
-    const char = data.charCodeAt(i);
-    // Make the hash
-    hash = ((hash << 5) - hash) + char;
-    // Convert to 32-bit integer
-    hash &= hash;
-  }
-}
-```
-
-**Good:**
-```javascript
-
-function hashIt(data) {
-  let hash = 0;
-  const length = data.length;
-
-  for (let i = 0; i < length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-
-    // Convert to 32-bit integer
-    hash &= hash;
-  }
-}
-
-```
-**[⬆ back to top](#table-of-contents)**
 
 ### Don't leave commented out code in your codebase
 Version control exists for a reason. Leave old code in your history.
@@ -1752,12 +1709,10 @@ and especially journal comments. Use `git log` to get history!
 
 **Bad:**
 ```ruby
-/**
- * 2016-12-20: Removed monads, didn't understand them (RM)
- * 2016-10-01: Improved using special monads (JP)
- * 2016-02-03: Removed type-checking (LI)
- * 2015-03-14: Added combine with type-checking (JR)
- */
+# 2016-12-20: Removed monads, didn't understand them (RM)
+# 2016-10-01: Improved using special monads (JP)
+# 2016-02-03: Removed type-checking (LI)
+# 2015-03-14: Added combine with type-checking (JR)
 def combine(a, b)
   return a + b
 end
@@ -1768,40 +1723,5 @@ end
 def combine(a, b)
   return a + b
 end
-```
-**[⬆ back to top](#table-of-contents)**
-
-### Avoid positional markers
-They usually just add noise. Let the functions and variable names along with the
-proper indentation and formatting give the visual structure to your code.
-
-**Bad:**
-```javascript
-////////////////////////////////////////////////////////////////////////////////
-// Scope Model Instantiation
-////////////////////////////////////////////////////////////////////////////////
-$scope.model = {
-  menu: 'foo',
-  nav: 'bar'
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// Action setup
-////////////////////////////////////////////////////////////////////////////////
-const actions = function() {
-  // ...
-};
-```
-
-**Good:**
-```javascript
-$scope.model = {
-  menu: 'foo',
-  nav: 'bar'
-};
-
-const actions = function() {
-  // ...
-};
 ```
 **[⬆ back to top](#table-of-contents)**
