@@ -506,7 +506,7 @@ name = 'Ryan McDermott'
 new_name = split_into_first_and_last_name(name)
 
 puts(name) # 'Ryan McDermott'
-puts(newName) # ['Ryan', 'McDermott']
+puts(new_name) # ['Ryan', 'McDermott']
 ```
 **[⬆ back to top](#table-of-contents)**
 
