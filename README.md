@@ -4,7 +4,7 @@ Clean Code concepts adapted for Ruby.
 
 Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript).
 
-*Note: This is still a WIP, some sections can definitely be improved with better examples. Pull requests are always welcome!*
+*Note: This is still a WIP. The examples are largely ported over from JavaScript so they may not be idiomatic. Feel free to point out any non-idiomatic Ruby code by submitting an issue and I'll correct it right away. Also, pull requests are always welcome!*
 
 ## Table of Contents
   1. [Introduction](#introduction)
@@ -1365,7 +1365,7 @@ As stated previously, Ruby doesn't have interfaces so the abstractions
 that are depended upon are implicit contracts. That is to say, the methods
 and properties that an object/class exposes to another object/class. In the
 example below, the implicit contract is that any Request module for an
-`InventoryTracker` will have a `requestItems` method.
+`InventoryTracker` will have a `request_items` method.
 
 **Bad:**
 ```ruby
