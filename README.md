@@ -1,6 +1,10 @@
 # clean-code-ruby
 
-Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript)
+Clean Code concepts adapted for Ruby.
+
+Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript).
+
+*Note: This is still a WIP, some sections can definitely be improved with better examples. Pull requests are always welcome!*
 
 ## Table of Contents
   1. [Introduction](#introduction)
