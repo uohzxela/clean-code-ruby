@@ -511,8 +511,7 @@ puts new_name # ['Ryan', 'McDermott']
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid Side Effects (part 2)
-In Ruby, primitives are passed by value and objects/arrays are passed by
-reference. In the case of objects and arrays, if your function makes a change
+In Ruby, everything is an object and everything is passed by value, but these values are references to objects. In the case of objects and arrays, if your function makes a change
 in a shopping cart array, for example, by adding an item to purchase,
 then any other function that uses that `cart` array will be affected by this
 addition. That may be great, however it can be bad too. Let's imagine a bad
@@ -733,7 +732,7 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid type-checking (part 2)
-If you are working with basic primitive values like strings and integers,
+If you are working with basic values like strings and integers,
 and you can't use polymorphism but you still feel the need to type-check,
 you should consider using [contracts.ruby](https://github.com/egonSchiele/contracts.ruby). The problem with manually type-checking Ruby is that
 doing it well requires so much extra verbiage that the faux "type-safety" you get
