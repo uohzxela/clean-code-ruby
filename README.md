@@ -70,7 +70,7 @@ get_customer_record()
 
 **Good:**
 ```ruby
-get_user()
+user()
 ```
 **[⬆ back to top](#table-of-contents)**
 
