@@ -63,14 +63,14 @@ current_date = Time.now.strftime('%Y/%m/%d')
 
 **Bad:**
 ```ruby
-get_user_info()
-get_client_data()
-get_customer_record()
+user_info
+user_data
+user_record
 ```
 
 **Good:**
 ```ruby
-user()
+user
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -83,7 +83,7 @@ Make your names searchable.
 **Bad:**
 ```ruby
 # What the heck is 86400 for?
-status = Timeout::timeout(86400) do
+status = Timeout::timeout(86_400) do
   # ...
 end
 ```
@@ -91,7 +91,7 @@ end
 **Good:**
 ```ruby
 # Declare them as capitalized globals.
-SECONDS_IN_A_DAY = 86400
+SECONDS_IN_A_DAY = 86_400
 
 status = Timeout::timeout(SECONDS_IN_A_DAY) do
   # ...
@@ -123,8 +123,8 @@ Explicit is better than implicit.
 ```ruby
 locations = ['Austin', 'New York', 'San Francisco']
 locations.each do |l|
-  do_stuff()
-  do_some_other_stuff()
+  do_stuff
+  do_some_other_stuff
   # ...
   # ...
   # ...
@@ -137,8 +137,8 @@ end
 ```ruby
 locations = ['Austin', 'New York', 'San Francisco']
 locations.each do |location|
-  do_stuff()
-  do_some_other_stuff()
+  do_stuff
+  do_some_other_stuff
   # ...
   # ...
   # ...
@@ -191,7 +191,7 @@ end
 
 **Good:**
 ```ruby
-def create_micro_brewery(brewery_name='Hipster Brew Co.')
+def create_micro_brewery(brewery_name = 'Hipster Brew Co.')
   # ...
 end
 ```
@@ -233,12 +233,12 @@ def create_menu(title:, body:, button_text:, cancellable:)
   # ...
 end
 
-create_menu({
+create_menu(
   title: 'Foo',
   body: 'Bar',
   button_text: 'Baz',
   cancellable: true
-})
+)
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -255,9 +255,7 @@ this guide other than this, you'll be ahead of many developers.
 def email_clients(clients)
   clients.each do |client|
     client_record = database.lookup(client)
-    if client_record.is_active()
-      email(client)
-    end
+    email(client) if client_record.active?
   end
 end
 ```
@@ -266,13 +264,13 @@ end
 ```ruby
 def email_active_clients(clients)
   clients
-    .select(&method(:is_active_client))
+    .select(&method(:active_client?))
     .each(&method(:email))
 end
 
-def is_active_client(client)
+def active_client?(client)
   client_record = database.lookup(client)
-  client_record.is_active()
+  client_record.active?
 end
 ```
 **[⬆ back to top](#table-of-contents)**
@@ -310,13 +308,13 @@ testing.
 **Bad:**
 ```ruby
 def parse(code)
-  REGEXES = [
+  regexes = [
     # ...
   ]
 
   statements = code.split(' ')
   tokens = []
-  REGEXES.each do |REGEX|
+  regexes.each do |regex|
     statements.each do |statement|
       # ...
     end
@@ -336,13 +334,13 @@ end
 **Good:**
 ```ruby
 def tokenize(code)
-  REGEXES = [
+  regexes = [
     # ...
   ]
 
   statements = code.split(' ')
   tokens = []
-  REGEXES.each do |REGEX|
+  regexes.each do |regex|
     statements.each do |statement|
       # tokens.push(...)
     end
@@ -395,11 +393,11 @@ updating multiple places anytime you want to change one thing.
 def show_developer_list(developers)
   developers.each do |developer|
     data = {
-      expected_salary: developer.calculate_expected_salary(),
-      experience: developer.get_experience(),
-      github_link: developer.get_github_link()
+      expected_salary: developer.expected_salary,
+      experience: developer.experience,
+      github_link: developer.github_link
     }
-    
+
     render(data)
   end
 end
@@ -407,11 +405,11 @@ end
 def show_manager_list(managers)
   managers.each do |manager|
     data = {
-      expected_salary: manager.calculate_expected_salary(),
-      experience: manager.get_experience(),
-      portfolio: manager.get_mba_projects()
+      expected_salary: manager.expected_salary,
+      experience: manager.experience,
+      portfolio: manager.mba_projects
     }
-    
+
     render(data)
   end
 end
@@ -422,15 +420,15 @@ end
 def show_employee_list(employees)
   employees.each do |employee|
     data = {
-      expected_salary: employee.calculate_expected_salary(),
-      experience: employee.get_experience()
+      expected_salary: employee.expected_salary,
+      experience: employee.experience
     }
 
     case employee.type
     when 'manager'
-      data.portfolio = employee.get_mba_projects()
+      data.portfolio = employee.mba_projects
     when 'developer'
-      data.github_link = employee.get_github_link()
+      data.github_link = employee.github_link
     end
 
     render(data)
@@ -545,7 +543,7 @@ it would be for you to manually clone objects and arrays.
 **Bad:**
 ```ruby
 def add_item_to_cart(cart, item)
-  cart.push({ item: item, time: Time.now })
+  cart.push(item: item, time: Time.now)
 end
 ```
 
@@ -608,7 +606,7 @@ programmer_output = [
 INITIAL_VALUE = 0
 
 total_output = programmer_output
-  .reduce(INITIAL_VALUE) { |acc, output| acc + output[:lines_of_code] }
+               .reduce(INITIAL_VALUE) { |acc, output| acc + output[:lines_of_code] }
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -644,7 +642,7 @@ end
 
 **Good:**
 ```ruby
-if genres.present?
+unless genres.blank?
   # ...
 end
 ```
@@ -664,14 +662,14 @@ just do one thing.
 ```ruby
 class Airplane
   # ...
-  def get_cruising_altitude
+  def cruising_altitude
     case @type
     when '777'
-      get_max_altitude() - get_passenger_count()
+      max_altitude - passenger_count
     when 'Air Force One'
-      get_max_altitude()
+      max_altitude
     when 'Cessna'
-      get_max_altitude() - get_fuel_expenditure()
+      max_altitude - fuel_expenditure
     end
   end
 end
@@ -685,22 +683,22 @@ end
 
 class Boeing777 < Airplane
   # ...
-  def get_cruising_altitude
-    get_max_altitude() - get_passenger_count()
+  def cruising_altitude
+    max_altitude - passenger_count
   end
 end
 
 class AirForceOne < Airplane
   # ...
-  def get_cruising_altitude
-    get_max_altitude()
+  def cruising_altitude
+    max_altitude
   end
 end
 
 class Cessna < Airplane
   # ...
-  def get_cruising_altitude
-    get_max_altitude() - get_fuel_expenditure()
+  def cruising_altitude
+    max_altitude - fuel_expenditure
   end
 end
 ```
@@ -806,16 +804,16 @@ server.
 
 **Bad:**
 ```ruby
-def make_bank_account()
+def make_bank_account
   # ...
 
   {
-    balance: 0,
+    balance: 0
     # ...
   }
 end
 
-account = make_bank_account()
+account = make_bank_account
 account.balance = 100
 account.balance # => 100
 ```
@@ -829,23 +827,35 @@ class BankAccount
   end
 
   # a "getter" via a public instance method
-  def get_balance
+  def balance
     @balance
   end
 
   # a "setter" via a public instance method
-  def set_balance(amount)
-    # ... validate before updating the balance
+  def balance=(amount)
     @balance = amount
   end
 end
 
 account = BankAccount.new
-account.set_balance(100)
-account.get_balance() # => 100
+account.balance = 100
+account.balance # => 100
 ```
 
-Also, don't be tempted to use `attr_accessor` for its convenient generation of getters and setters. Unless you are implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs), using attribute accessors is a code smell. Read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
+Even better, you should use `attr_accessor` to define trivial getter and setter methods, this is especially convenient for implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs).
+
+**Better:**
+```ruby
+class BankAccount
+  attr_accessor :balance
+end
+
+account = BankAccount.new
+account.balance = 100
+account.balance # => 100
+```
+
+However, you have to be aware that in some situations, using `attr_accessor` is a code smell, read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -907,27 +917,17 @@ end
 
 car = Car.new('Ford','F-150','red')
   .set_color('pink')
-  .save()
+  .save
 ```
 
 **Good:**
 ```ruby
 class Car
+  attr_accessor :make, :model, :color
+
   def initialize(make, model, color)
     @make = make
     @model = model
-    @color = color
-  end
-
-  def set_make(make)
-    @make = make
-  end
-
-  def set_model(model)
-    @model = model
-  end
-
-  def set_color(color)
     @color = color
   end
 
@@ -936,9 +936,9 @@ class Car
   end
 end
 
-car = Car.new('Ford','F-150','red')
-car.set_color('pink')
-car.save()
+car = Car.new('Ford', 'F-150', 'red')
+car.color = 'pink'
+car.save
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -996,8 +996,8 @@ end
 
 class Employee
   def initialize(name, email)
-    this.name = name;
-    this.email = email;
+    this.name = name
+    this.email = email
   end
 
   def set_tax_data(ssn, salary)
@@ -1027,12 +1027,11 @@ class UserSettings
   end
 
   def change_settings(settings)
-    if verify_credentials()
-      # ...
-    end
+    return unless valid_credentials?
+    # ...
   end
 
-  def verify_credentials
+  def valid_credentials?
     # ...
   end
 end
@@ -1045,11 +1044,10 @@ class UserAuth
     @user = user
   end
 
-  def verify_credentials
+  def valid_credentials?
     # ...
   end
 end
-
 
 class UserSettings
   def initialize(user)
@@ -1058,9 +1056,8 @@ class UserSettings
   end
 
   def change_settings(settings)
-    if @auth.verify_credentials()
-      # ...
-    end
+    return unless @auth.valid_credentials?
+    # ...
   end
 end
 ```
@@ -1075,9 +1072,7 @@ add new functionalities without changing existing code.
 **Bad:**
 ```ruby
 class Adapter
-  def get_name
-    @name
-  end
+  attr_reader :name
 end
 
 class AjaxAdapter < Adapter
@@ -1100,19 +1095,19 @@ class HttpRequester
   end
 
   def fetch(url)
-    adapter_name = @adapter.get_name()
-    
+    adapter_name = @adapter.name
+
     if adapter_name == 'ajaxAdapter'
       make_ajax_call(url)
     elsif adapter_name == 'httpNodeAdapter'
       make_http_call(url)
     end
   end
-  
+
   def make_ajax_call(url)
     # ...
   end
-  
+
   def make_http_call(url)
     # ...
   end
@@ -1121,6 +1116,10 @@ end
 
 **Good:**
 ```ruby
+class Adapter
+  attr_reader :name
+end
+
 class AjaxAdapter < Adapter
   def initialize
     super()
@@ -1143,7 +1142,7 @@ class NodeAdapter < Adapter
   end
 end
 
-class HttpRequester {
+class HttpRequester
   def initialize(adapter)
     @adapter = adapter
   end
@@ -1177,7 +1176,7 @@ class Rectangle
     @height = 0
   end
 
-  def set_color(color)
+  def color=(color)
     # ...
   end
 
@@ -1185,26 +1184,26 @@ class Rectangle
     # ...
   end
 
-  def set_width(width)
+  def width=(width)
     @width = width
   end
 
-  def set_height(height)
+  def height=(height)
     @height = height
   end
 
-  def get_area
+  def area
     @width * @height
   end
 end
 
 class Square < Rectangle
-  def set_width(width)
+  def width=(width)
     @width = width
     @height = width
   end
 
-  def set_height(height)
+  def height=(height)
     @width = height
     @height = height
   end
@@ -1212,9 +1211,9 @@ end
 
 def render_large_rectangles(rectangles)
   rectangles.each do |rectangle|
-    rectangle.set_width(4)
-    rectangle.set_height(5)
-    area = rectangle.get_area() # BAD: Returns 25 for Square. Should be 20.
+    rectangle.width = 4
+    rectangle.height = 5
+    area = rectangle.area # BAD: Returns 25 for Square. Should be 20.
     rectangle.render(area)
   end
 end
@@ -1226,7 +1225,7 @@ render_large_rectangles(rectangles)
 **Good:**
 ```ruby
 class Shape
-  def set_color(color)
+  def color=(color)
     # ...
   end
 
@@ -1242,7 +1241,7 @@ class Rectangle < Shape
     @height = height
   end
 
-  def get_area
+  def area
     @width * @height
   end
 end
@@ -1253,14 +1252,14 @@ class Square < Shape
     @length = length
   end
 
-  def get_area
+  def area
     @length * @length
   end
-}
+end
 
 def render_large_shapes(shapes)
   shapes.each do |shape|
-    area = shape.get_area()
+    area = shape.area
     shape.render(area)
   end
 end
@@ -1288,14 +1287,17 @@ The following example is taken from [here](http://geekhmer.github.io/blog/2015/0
 class Car
   # used by Driver
   def open
+    # ...
   end
-  
+
   # used by Driver
   def start_engine
+    # ...
   end
-  
+
   # used by Mechanic
   def change_engine
+    # ...
   end
 end
 
@@ -1319,15 +1321,18 @@ end
 # used by Driver only
 class Car
   def open
+    # ...
   end
 
   def start_engine
+    # ...
   end
 end
 
 # used by Mechanic only
 class CarInternals
   def change_engine
+    # ...
   end
 end
 
@@ -1370,7 +1375,7 @@ example below, the implicit contract is that any Request module for an
 ```ruby
 class InventoryRequester
   def initialize
-    @REQ_METHODS = ['HTTP']
+    @req_methods = ['HTTP']
   end
 
   def request_item(item)
@@ -1414,7 +1419,7 @@ end
 
 class InventoryRequesterV1
   def initialize
-    @REQ_METHODS = ['HTTP']
+    @req_methods = ['HTTP']
   end
 
   def request_item(item)
@@ -1424,7 +1429,7 @@ end
 
 class InventoryRequesterV2
   def initialize
-    @REQ_METHODS = ['WS']
+    @req_methods = ['WS']
   end
 
   def request_item(item)
@@ -1463,14 +1468,11 @@ require 'rspec'
 
 describe 'Calculator' do
   let(:calculator) { Calculator.new }
-  
+
   it 'performs addition, subtraction, multiplication and division' do
     expect(calculator.calculate('1 + 2')).to eq(3)
-    
     expect(calculator.calculate('4 - 2')).to eq(2)
-    
     expect(calculator.calculate('2 * 3')).to eq(6)
-    
     expect(calculator.calculate('6 / 2')).to eq(3)
   end
 end
@@ -1482,19 +1484,19 @@ require 'rspec'
 
 describe 'Calculator' do
   let(:calculator) { Calculator.new }
-  
+
   it 'performs addition' do
     expect(calculator.calculate('1 + 2')).to eq(3)
   end
-  
+
   it 'performs subtraction' do
     expect(calculator.calculate('4 - 2')).to eq(2)
   end
-  
+
   it 'performs multiplication' do
     expect(calculator.calculate('2 * 3')).to eq(6)
   end
-  
+
   it 'performs division' do
     expect(calculator.calculate('6 / 2')).to eq(3)
   end
@@ -1523,7 +1525,7 @@ logger = Logger.new(STDOUT)
 
 begin
   function_that_might_throw()
-rescue => err
+rescue StandardError => err
   logger.info(err)
 end
 ```
@@ -1538,7 +1540,7 @@ logger.level = Logger::ERROR
 
 begin
   function_that_might_throw()
-rescue => err
+rescue StandardError => err
   # Option 1: Only log errors
   logger.error(err)
   # Option 2: Notify end-user via an interface
@@ -1575,11 +1577,12 @@ daysInMonth = 30
 songs = ['Back In Black', 'Stairway to Heaven', 'Hey Jude']
 Artists = ['ACDC', 'Led Zeppelin', 'The Beatles']
 
-def eraseDatabase ; end
-def restore_database ; end
+def eraseDatabase; end
 
-class ANIMAL ; end
-class Alpaca ; end
+def restore_database; end
+
+class ANIMAL; end
+class Alpaca; end
 ```
 
 **Good:**
@@ -1587,14 +1590,15 @@ class Alpaca ; end
 DAYS_IN_WEEK = 7
 DAYS_IN_MONTH = 30
 
-SONGS = ['Back In Black', 'Stairway to Heaven', 'Hey Jude']
-ARTISTS = ['ACDC', 'Led Zeppelin', 'The Beatles']
+SONGS = ['Back In Black', 'Stairway to Heaven', 'Hey Jude'].freeze
+ARTISTS = ['ACDC', 'Led Zeppelin', 'The Beatles'].freeze
 
-def erase_database ; end
-def restore_database ; end
+def erase_database; end
 
-class Animal ; end
-class Alpaca ; end
+def restore_database; end
+
+class Animal; end
+class Alpaca; end
 ```
 **[⬆ back to top](#table-of-contents)**
 
@@ -1619,29 +1623,29 @@ class PerformanceReview
     db.lookup(@employee, 'manager')
   end
 
-  def get_peer_reviews
-    peers = lookup_peers()
+  def peer_reviews
+    peers = lookup_peers
     # ...
   end
 
   def perf_review
-    get_peer_reviews()
-    get_manager_review()
-    get_self_review()
+    peer_reviews
+    manager_review
+    self_review
   end
 
-  def get_manager_review
-    manager = lookup_manager()
+  def manager_review
+    manager = lookup_manager
     # ...
   end
 
-  def get_self_review
+  def self_review
     # ...
   end
 end
 
 review = PerformanceReview.new(employee)
-review.perf_review()
+review.perf_review
 ```
 
 **Good:**
@@ -1652,22 +1656,22 @@ class PerformanceReview
   end
 
   def perf_review
-    get_peer_reviews()
-    get_manager_review()
-    get_self_review()
+    peer_reviews
+    manager_review
+    self_review
   end
 
-  def get_peer_reviews
-    peers = lookup_peers()
+  def peer_reviews
+    peers = lookup_peers
     # ...
   end
 
   def lookup_peers
     db.lookup(@employee, 'peers')
   end
-  
-  def get_manager_review
-    manager = lookup_manager()
+
+  def manager_review
+    manager = lookup_manager
     # ...
   end
 
@@ -1675,13 +1679,13 @@ class PerformanceReview
     db.lookup(@employee, 'manager')
   end
 
-  def get_self_review
+  def self_review
     # ...
   end
 end
 
 review = PerformanceReview.new(employee)
-review.perf_review()
+review.perf_review
 ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -1694,15 +1698,15 @@ Version control exists for a reason. Leave old code in your history.
 
 **Bad:**
 ```ruby
-do_stuff()
-# do_other_stuff()
-# do_some_more_stuff()
-# do_so_much_stuff()
+do_stuff
+# do_other_stuff
+# do_some_more_stuff
+# do_so_much_stuff
 ```
 
 **Good:**
 ```ruby
-do_stuff()
+do_stuff
 ```
 **[⬆ back to top](#table-of-contents)**
 
