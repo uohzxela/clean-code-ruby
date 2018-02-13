@@ -307,7 +307,7 @@ testing.
 
 **Bad:**
 ```ruby
-def parse(code)
+def interpret(code)
   regexes = [
     # ...
   ]
@@ -325,14 +325,23 @@ def parse(code)
     # lex...
   end
 
+  result = []
   ast.each do |node|
-    # parse...
+    # result.push(...)
   end
+
+  result
 end
 ```
 
 **Good:**
 ```ruby
+def interpet(code)
+  tokens = tokenize(code)
+  ast = lex(tokens)
+  parse(ast)
+end
+
 def tokenize(code)
   regexes = [
     # ...
@@ -345,6 +354,7 @@ def tokenize(code)
       # tokens.push(...)
     end
   end
+
   tokens
 end
 
@@ -353,15 +363,17 @@ def lex(tokens)
   tokens.each do |token|
     # ast.push(...)
   end
+
   ast
 end
 
-def parse(code)
-  tokens = tokenize(code)
-  ast = lex(tokens)
+def parse(ast)
+  result = []
   ast.each do |node|
-    # parse...
+    # result.push(...)
   end
+
+  result
 end
 ```
 **[⬆ back to top](#table-of-contents)**
