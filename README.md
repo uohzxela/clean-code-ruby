@@ -633,11 +633,11 @@ end
 
 **Good:**
 ```ruby
-def should_send_message(params)
+def send_message?(params)
   params[:message].present? && params[:recipient].present?
 end
 
-if should_send_message(params)
+if send_message?(params)
   # ...
 end
 ```
@@ -655,6 +655,12 @@ end
 **Good:**
 ```ruby
 unless genres.blank?
+  # ...
+end
+
+# or
+
+if genres.present?
   # ...
 end
 ```
