@@ -438,9 +438,9 @@ def show_employee_list(employees)
 
     case employee.type
     when 'manager'
-      data.portfolio = employee.mba_projects
+      data[:portfolio] = employee.mba_projects
     when 'developer'
-      data.github_link = employee.github_link
+      data[:github_link] = employee.github_link
     end
 
     render(data)
