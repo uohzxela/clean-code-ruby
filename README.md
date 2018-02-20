@@ -61,24 +61,33 @@ current_date = Time.now.strftime('%Y/%m/%d')
 
 ### Use the same vocabulary for the same type of variable
 
+Pick one word for the concept and stick to it.
 **Bad:**
 ```ruby
 user_info
 user_data
 user_record
+
+starts_at
+start_at
+start_time
 ```
 
 **Good:**
 ```ruby
 user
+
+starts_at
 ```
 **[⬆ back to top](#table-of-contents)**
 
-### Use searchable names
+### Use searchable names and use constants
 We will read more code than we will ever write. It's important that the code we
 do write is readable and searchable. By *not* naming variables that end up
 being meaningful for understanding our program, we hurt our readers.
 Make your names searchable.
+
+Also, instead of hardcoding values and using "magic numbers", create constants.
 
 **Bad:**
 ```ruby
@@ -208,11 +217,11 @@ One or two arguments is the ideal case, and three should be avoided if possible.
 Anything more than that should be consolidated. Usually, if you have
 more than two arguments then your function is trying to do too much. In cases
 where it's not, most of the time a higher-level object will suffice as an
-argument.
+argument. Or you can pass data to the function by instance variables.
 
 Since Ruby allows you to make objects on the fly, without a lot of class
 boilerplate, you can use an object if you are finding yourself needing a
-lot of arguments.
+lot of arguments. The prevailing pattern in Ruby is to use a hash of arguments.
 
 To make it obvious what properties the function expects, you can use the keyword arguments syntax (introduced in Ruby 2.1). This has a few advantages:
 
@@ -303,7 +312,7 @@ add_month_to_date(date, 1)
 ### Functions should only be one level of abstraction
 When you have more than one level of abstraction your function is usually
 doing too much. Splitting up functions leads to reusability and easier
-testing.
+testing. Furthermore, functions should descend by the level of abstraction: one very abstract function should call methods that are less abstract and so on.
 
 **Bad:**
 ```ruby
@@ -585,7 +594,7 @@ programmer_output = [
     name: 'Jimmy Gosling',
     lines_of_code: 150
   }, {
-    name: 'Gracie Hopper',
+    name: 'Grace Hopper',
     lines_of_code: 1000
   }
 ]
@@ -610,7 +619,7 @@ programmer_output = [
     name: 'Jimmy Gosling',
     lines_of_code: 150
   }, {
-    name: 'Gracie Hopper',
+    name: 'Grace Hopper',
     lines_of_code: 1000
   }
 ]
@@ -1481,7 +1490,7 @@ Test Driven Development (TDD), that is great, but the main point is to just
 make sure you are reaching your coverage goals before launching any feature,
 or refactoring an existing one.
 
-### Single concept per test
+### Single expectation per test
 
 **Bad:**
 ```ruby
@@ -1569,6 +1578,25 @@ rescue StandardError => err
   # Option 3: Report error to a third-party service like Honeybadger
   report_error_to_service(err)
   # OR do all three!
+end
+```
+
+### Provide context with exceptions
+Use a descriptive error class name and a message when you raise an error. That way you know why the error occured and you can rescue the specific type of error.
+
+***Bad:***
+```ruby
+def initialize(user)
+  fail unless user
+  ...
+end
+```
+
+***Good:***
+```ruby
+def initialize(user)
+  fail ArgumentError, 'Missing user' unless user
+  ...
 end
 ```
 
