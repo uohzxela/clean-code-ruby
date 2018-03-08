@@ -1192,7 +1192,7 @@ of the desirable properties of that program (correctness, task performed,
 etc.)." That's an even scarier definition.
 
 The best explanation for this is if you have a parent class and a child class,
-then the base class and child class can be used interchangeably without getting
+then the base class can always be replaced by the child class without getting
 incorrect results. This might still be confusing, so let's take a look at the
 classic Square-Rectangle example. Mathematically, a square is a rectangle, but
 if you model it using the "is-a" relationship via inheritance, you quickly
