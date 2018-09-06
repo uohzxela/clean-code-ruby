@@ -10,6 +10,7 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   1. [Introdução](#introdução)
   2. [Variáveis](#variáveis)
   3. [Funções](#funções)
+  4. [Objetos e Estruturas de Dado](#objetos-e-estruturas-de-dado)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -792,7 +793,7 @@ end
 
 ### Remova código morto
 Código morto é tão ruim quanto código duplicado. Não há razão para mantê-lo em
-sua base de código. Se não está sendo chamado, livre dele! Ele ainda estará
+sua base de código. Se não está sendo chamado, livre-se dele! Ele ainda estará
 seguro no seu histórico de versão se você ainda precisar dele.
 
 **Ruim:**
@@ -818,4 +819,83 @@ end
 req = new_request_module(request_url)
 inventory_tracker('apples', req, 'www.inventory-awesome.io')
 ```
+**[⬆ retornar ao topo](#sumário)**
+
+## **Objetos e Estruturas de Dado**
+### Use *getters* e *setters*
+Usar *getters* e *setters* para acessar informações de objetos poderia ser
+melhor do que simplesmente procurar por uma propriedade em um objeto. "Por que?"
+você deve perguntar. Bem, aqui está uma lista desorganizada de motivos:
+
+* Quando você quiser fazer algo além de retornar uma propriedade de um objeto,
+você não vai precisar procurar e mudar todos os acessos na sua base de código.
+* Torna o processo de adicionar validação simples em uma função do tipo `set`.
+* Encapsula a representação interna.
+* Mais fácil adicionar registro de log e tratamento de errors.
+* Você pode fazer um *lazy load* das propriedades de um objeto, por exemplo,
+recuperando elas de um servidor.
+
+**Ruim:**
+```ruby
+def make_bank_account
+  # ...
+
+  {
+    balance: 0
+    # ...
+  }
+end
+
+account = make_bank_account
+account[:balance] = 100
+account[:balance] # => 100
+```
+
+**Bom:**
+```ruby
+class BankAccount
+  def initialize
+    # Esse é privado
+    @balance = 0
+  end
+
+  # Um "getter" através de um método público de instância
+  def balance
+    # Faça alguma registro de log
+    @balance
+  end
+
+  # Um "setter" através de um método público de instância
+  def balance=(amount)
+    # Faça alguma registro de log
+    # Faça alguma validação
+    @balance = amount
+  end
+end
+
+account = BankAccount.new
+account.balance = 100
+account.balance # => 100
+```
+
+Alternativamente, se seus *getters* e *setters* são absolutamente triviais, você
+deveria usar `attr_accessor` para definir eles. Isso é conveniente em especial
+para implementar objetos para guardar informação, que expõem dados para outras
+partes do sistema (ex: objetos de ActiveRecord, empacotadores de resposta para
+APIs remotas).
+
+**Bom:**
+```ruby
+class Toy
+  attr_accessor :price
+end
+
+toy = Toy.new
+toy.price = 50
+toy.price # => 50
+```
+Contudo, você precisa estar ciente de que em algumas situações, usar
+`attr_accessor` é um *code smell*, leia mais sobre
+[aqui](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
+
 **[⬆ retornar ao topo](#sumário)**
