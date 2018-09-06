@@ -529,3 +529,293 @@ puts name # 'Ryan McDermott'
 puts new_name # ['Ryan', 'McDermott']
 ```
 **[⬆ retornar ao topo](#sumário)**
+
+### Evite Efeitos Colaterais (Parte 2)
+Em Ruby, tudo é um objeto e tudo é passado por valor, mas esses valores são
+referências para objetos. No caso de objetos e vetores, se seu sua função faz
+uma alteração em um vetor de um `carrinho` de compras, por exemplo, ao adicionar
+um item de compra, então qualquer outra função que use o vetor desse carrinho
+será afetada por essa adição. Isso pode ser ótimo, no entanto pode ser ruim
+também. Vamos imaginar uma situação ruim:
+
+O usuário clica no botão "Comprar", que chama a função `comprar` que invoca uma
+requisição na rede e envia o vetor de itens `carrinho` para para o servidor.
+Devido a conexão ruim com a rede, a função `comprar` tem que continuar tentando
+efetuar a requisição. Agora, e se o usuário nesse intervalo de tempo
+acidentalmente clicar no botão "Adicionar ao Carrinho" em um item que ele não
+quer na realidade, antes da requisição ser iniciada?
+Se isso acontecer e a requisição começar, então aquela função `comprar` vai
+enviar o item adicionado acidentalmente porque ela tem uma referência para o
+vetor de itens que a função `adicionar_item_ao_carrinho` modificou adicionando o
+item indesejado.
+
+Uma boa solução seria o `adicionar_item_ao_carrinho` sempre clonar o `carrinho`,
+editá-lo e retornar o clone. Isso garante que nenhuma outra função que está
+guardando uma referência para o carrinho de compras será afetada por qualquer
+mudança.
+
+Duas ressalvas que devem ser mencionada para essa abordagem:
+  1. Talvez existam casos onde você realmente quer modificar o objeto de entrada,
+mas quando você adota essa prática de programação você vai descobrir que esses
+casos são bem raros. A maiorira das coisa podem ser refatoradas para ter
+nenhum efeito colateral!
+  2. Clonar objetos grandes pode ser custoso em relação a desempenho. Por sorte,
+isso não é um grande problema na prática porque existem
+[ótimas gems](https://github.com/hamstergem/hamster) que permitem que esse tipo
+de abordagem de programação seja rápida e não muito intensiva em relação a uso
+de memória como seria caso você clonasse objetos e vetores manualmente.
+
+**Ruim:**
+```ruby
+def add_item_to_cart(cart, item)
+  cart.push(item: item, time: Time.now)
+end
+```
+
+**Bom:**
+```ruby
+def add_item_to_cart(cart, item)
+  cart + [{ item: item, time: Time.now }]
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Prefira programação funcional sobre programação imperativa
+Ruby não é uma linguagem funcional do mesmo modo que Haskell é, mas ela tem
+um aroma funcional nela. Linguagens funcionais são mais limpas e fáceis de
+testar. Prefira esse estilo de programação quando puder.
+
+**Ruim:**
+```ruby
+programmer_output = [
+  {
+    name: 'Uncle Bobby',
+    lines_of_code: 500
+  }, {
+    name: 'Suzie Q',
+    lines_of_code: 1500
+  }, {
+    name: 'Jimmy Gosling',
+    lines_of_code: 150
+  }, {
+    name: 'Grace Hopper',
+    lines_of_code: 1000
+  }
+]
+
+total_output = 0
+
+programmer_output.each do |output|
+  total_output += output[:lines_of_code]
+end
+```
+
+**Bom:**
+```ruby
+programmer_output = [
+  {
+    name: 'Uncle Bobby',
+    lines_of_code: 500
+  }, {
+    name: 'Suzie Q',
+    lines_of_code: 1500
+  }, {
+    name: 'Jimmy Gosling',
+    lines_of_code: 150
+  }, {
+    name: 'Grace Hopper',
+    lines_of_code: 1000
+  }
+]
+
+INITIAL_VALUE = 0
+
+total_output = programmer_output
+               .reduce(INITIAL_VALUE) { |acc, output| acc + output[:lines_of_code] }
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Encapsule Condicionais
+
+**Ruim:**
+```ruby
+if params[:message].present? && params[:recipient].present?
+  # ...
+end
+```
+
+**Bom:**
+```ruby
+def send_message?(params)
+  params[:message].present? && params[:recipient].present?
+end
+
+if send_message?(params)
+  # ...
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Evite condicionais negativas
+
+**Ruim:**
+```ruby
+if !genres.blank?
+  # ...
+end
+```
+
+**Bom:**
+```ruby
+unless genres.blank?
+  # ...
+end
+
+# ou
+
+if genres.present?
+  # ...
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Evite Condicionais
+Isso parece uma tarefa impossível. Ao escutar isso pela primeira vez, a maioria
+das pessoas dizem, "como eu deveria fazer qualquer coisa sem uma declaração `if`
+?". A resposta é que você pode usar polimorfismo para alcançar o mesmo objetivo
+em muitos casos. A segunda pergunta é geralmente, "bem, isso é ótimo, mas por
+que eu iria querer fazer isso?". A resposta é um conceito de código limpo que
+aprendemos anteriormente: uma função deveria fazer apenas uma coisa. Quando
+você tem classes e funções que tem declarações do tipo `if`, você está dizendo
+ao usuário daquela função que ela faz mais do que uma coisa. Lembre-se, faça
+apenas uma coisa.
+
+**Ruim:**
+```ruby
+class Airplane
+  # ...
+  def cruising_altitude
+    case @type
+    when '777'
+      max_altitude - passenger_count
+    when 'Air Force One'
+      max_altitude
+    when 'Cessna'
+      max_altitude - fuel_expenditure
+    end
+  end
+end
+```
+
+**Bom:**
+```ruby
+class Airplane
+  # ...
+end
+
+class Boeing777 < Airplane
+  # ...
+  def cruising_altitude
+    max_altitude - passenger_count
+  end
+end
+
+class AirForceOne < Airplane
+  # ...
+  def cruising_altitude
+    max_altitude
+  end
+end
+
+class Cessna < Airplane
+  # ...
+  def cruising_altitude
+    max_altitude - fuel_expenditure
+  end
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Evite Verificações de Tipo (Parte 1)
+Você não precisa declarar o tipo em Ruby, o que significa que suas funções
+podem receber qualquer tipo de argumento. Algumas vezes vocês você tropeça
+devido a essa liberdade e se torna tentador fazer verificação de tipo em suas
+funções. Existem diversas maneiras de se evitar ter que fazer isso. A primeira
+coisa a ser considerada é APIs consistentes.
+
+**Ruim:**
+```ruby
+def travel_to_texas(vehicle)
+  if vehicle.is_a?(Bicycle)
+    vehicle.pedal(@current_location, Location.new('texas'))
+  elsif vehicle.is_a?(Car)
+    vehicle.drive(@current_location, Location.new('texas'))
+  end
+end
+```
+
+**Bom:**
+```ruby
+def travel_to_texas(vehicle)
+  vehicle.move(@current_location, Location.new('texas'))
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Evite Verificações de Tipo (Parte 1)
+Se você está trabalhando com tipos básicos como strings e inteiros e você
+não pode usar polimorfismo, mas ainda sente necessidade de verificar o tipo,
+você deveria considerar usar [contracts.ruby](https://github.com/egonSchiele/contracts.ruby).
+O problema com a verificação de tipo manual em Ruby é que ela não compensa a
+perda de legibilidade. Mantenha seu código em Ruby limpo, escreva bons testes e
+tenha bons *reviews* de código.
+
+**Ruim:**
+```ruby
+def combine(val1, val2)
+  if (val1.is_a?(Numeric) && val2.is_a?(Numeric)) ||
+     (val1.is_a?(String) && va2.is_a?(String))
+    val1 + val2
+  end
+
+  raise 'Must be of type String or Numeric'
+end
+```
+
+**Bom:**
+```ruby
+def combine(val1, val2)
+  val1 + val2
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Remova código morto
+Código morto é tão ruim quanto código duplicado. Não há razão para mantê-lo em
+sua base de código. Se não está sendo chamado, livre dele! Ele ainda estará
+seguro no seu histórico de versão se você ainda precisar dele.
+
+**Ruim:**
+```ruby
+def old_request_module(url)
+  # ...
+end
+
+def new_request_module(url)
+  # ...
+end
+
+req = new_request_module(request_url)
+inventory_tracker('apples', req, 'www.inventory-awesome.io')
+```
+
+**Bom:**
+```ruby
+def new_request_module(url)
+  # ...
+end
+
+req = new_request_module(request_url)
+inventory_tracker('apples', req, 'www.inventory-awesome.io')
+```
+**[⬆ retornar ao topo](#sumário)**
