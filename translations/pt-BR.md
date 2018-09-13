@@ -899,3 +899,155 @@ Contudo, você precisa estar ciente de que em algumas situações, usar
 [aqui](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
 **[⬆ retornar ao topo](#sumário)**
+
+## **Classes**
+### Evite Interfaces Fluentes
+Uma [Interface Fluente](https://en.wikipedia.org/wiki/Fluent_interface) é uma
+API orientada a objetos que tem como objeto melhorar a legibilidade do código
+fonte ao usar [encadeamento de métodos](https://en.wikipedia.org/wiki/Method_chaining).
+
+Enquanto existem alguns contextos, frequentemente construtores de objetos, onde
+esse padrão reduz a verbosidade do código (ex: Consultas do ActiveRecord), muitas
+vezes ele tem alguns custos:
+
+1. Quebra [Encapsulamento](https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29)
+2. Breaks [Decoradores (*Decorators*)](https://en.wikipedia.org/wiki/Decorator_pattern)
+3. É mais difícil de trabalhar com [*mock*](https://en.wikipedia.org/wiki/Mock_object)
+em suítes de teste.
+4. Faz com que diferenças (*diffs*) entre commits sejam mais difíceis de serem lidas.
+
+Para mais informações sobre isso você pode ler a
+[postagem completa](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
+no blog, escrita por [Marco Pivetta](https://github.com/Ocramius) sobre esse
+tópico.
+
+**Ruim**
+```ruby
+class Car
+  def initialize(make, model, color)
+    @make = make
+    @model = model
+    @color = color
+    # Obs: Retornando self para encadeamento
+    self
+  end
+
+  def set_make(make)
+    @make = make
+    # Obs: Retornando self para encadeamento
+    self
+  end
+
+  def set_model(model)
+    @model = model
+    # Obs: Retornando self para encadeamento
+    self
+  end
+
+  def set_color(color)
+    @color = color
+    # Obs: Retornando self para encadeamento
+    self
+  end
+
+  def save
+    # Salva objeto...
+    # Obs: Retornando self para encadeamento
+    self
+  end
+end
+
+car = Car.new('Ford','F-150','red')
+  .set_color('pink')
+  .save
+```
+
+**Bom**
+```ruby
+class Car
+  attr_accessor :make, :model, :color
+
+  def initialize(make, model, color)
+    @make = make
+    @model = model
+    @color = color
+  end
+
+  def save
+    # Salva objeto...
+  end
+end
+
+car = Car.new('Ford', 'F-150', 'red')
+car.color = 'pink'
+car.save
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Prefira Composição ao invés de Herança
+Essa declaração ficou famosa no livro
+Padrões de Design([*Design Patterns*](https://en.wikipedia.org/wiki/Design_Patterns))
+escrito pelo Bando dos Quatro (*Gang of Four*). Você deveria preferir composição
+ao invés de heranção onde puder. Existem muitas boas razões para usar herança
+e muitas boas razões para usar composição. O ponto principal para esse ditado
+é que se sua mente vai instintivamente para herança, tente pensar se composição
+poderia modelar seu problema melhor. Em alguns casos, ela pode.
+
+Você pode estar se perguntando então, "quando eu deveria usar herança?". Isso
+depende no problema em questão, mas essa é uma lista decente sobre quando
+usar herança faz mais sentido do que composição:
+
+1. Sua herança representa uma relação do tipo "é uma" e não uma "tem uma"
+(Humano->Animal vs. Usuario->DetalhesUsuario).
+2. Você pode reutilizar código da classe base
+(Humano pode ser mover como todos os animais).
+3. Você quer fazer mudanças globais para classes derivadas ao trocar a classe
+base (Muda o consumo calórico de todos os animais quando eles se movem).
+
+**Ruim**
+```ruby
+class Employee
+  def initialize(name, email)
+    @name = name
+    @email = email
+  end
+
+  # ...
+end
+
+# Ruim porque Employees "tem" informações sobre tax. EmployeeTaxData não é um tipo de Employee
+class EmployeeTaxData < Employee
+  def initialize(ssn, salary)
+    super()
+    @ssn = ssn
+    @salary = salary
+  end
+
+  # ...
+end
+```
+
+**Bom**
+```ruby
+class EmployeeTaxData
+  def initialize(ssn, salary)
+    @ssn = ssn
+    @salary = salary
+  end
+
+  # ...
+end
+
+class Employee
+  def initialize(name, email)
+    this.name = name
+    this.email = email
+  end
+
+  def set_tax_data(ssn, salary)
+    @tax_data = EmployeeTaxData.new(ssn, salary)
+  end
+  # ...
+end
+```
+**[⬆ retornar ao topo](#sumário)**
