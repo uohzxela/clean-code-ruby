@@ -15,6 +15,7 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   6. [SOLID](#solid)
   7. [Testes](#testes)
   8. [Lidando com Erros](#lidando-com-erros)
+  9. [Formatação](#formatação)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -1627,6 +1628,144 @@ def initialize(user)
   fail ArgumentError, 'Missing user' unless user
   ...
 end
+```
+
+**[⬆ retornar ao topo](#sumário)**
+
+## **Formatação**
+Formatação é subjetivo. Como muitas regras aqui, não existe uma regra rígida e
+rápida que você deve seguir. O ponto principal é NÃO DISCUTA sobre formatação.
+Existem diversas ferramentas como [RuboCop](https://github.com/bbatsov/rubocop)
+para automatizar isso. Use uma! É uma perda de tempo e dinheiro engenheiros
+ficarem discutindo sobre formatação.
+
+Para coisas que não estão no alcance de formatação automática (identação,
+tabulação vs. espaços, aspas simples ou duplas, etc.) olhe aqui para alguma
+orientação.
+
+### Use Capitalização Consistente
+Uma vez que você não declara tipos em Ruby, a capitalização diz muito sobre suas
+variáveis, funções, etc. Essas regras são subjetivas, então sua equipe pode
+escolher o que ela quiser. O ponto é, não importa o que vocês escolherem, apenas
+sejam consistentes.
+
+**Ruim**
+```ruby
+DAYS_IN_WEEK = 7
+daysInMonth = 30
+
+songs = ['Back In Black', 'Stairway to Heaven', 'Hey Jude']
+Artists = ['ACDC', 'Led Zeppelin', 'The Beatles']
+
+def eraseDatabase; end
+
+def restore_database; end
+
+class ANIMAL; end
+class Alpaca; end
+```
+
+**Bom**
+```ruby
+DAYS_IN_WEEK = 7
+DAYS_IN_MONTH = 30
+
+SONGS = ['Back In Black', 'Stairway to Heaven', 'Hey Jude'].freeze
+ARTISTS = ['ACDC', 'Led Zeppelin', 'The Beatles'].freeze
+
+def erase_database; end
+
+def restore_database; end
+
+class Animal; end
+class Alpaca; end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Invocadores e Invocados deveriam estar Próximos
+Se uma função chama outra, mantenha essas funções verticalmente próximas no
+arquivo fonte. Idealmente, mantenha o invocador logo acima do invocado. Nós
+tendemos a ler código de cima para baixo, como em um jornal. Por causa disso,
+faça seu código ler desse jeito.
+
+**Ruim**
+```ruby
+class PerformanceReview
+  def initialize(employee)
+    @employee = employee
+  end
+
+  def lookup_peers
+    db.lookup(@employee, 'peers')
+  end
+
+  def lookup_manager
+    db.lookup(@employee, 'manager')
+  end
+
+  def peer_reviews
+    peers = lookup_peers
+    # ...
+  end
+
+  def perf_review
+    peer_reviews
+    manager_review
+    self_review
+  end
+
+  def manager_review
+    manager = lookup_manager
+    # ...
+  end
+
+  def self_review
+    # ...
+  end
+end
+
+review = PerformanceReview.new(employee)
+review.perf_review
+```
+
+**Bom**
+```ruby
+class PerformanceReview
+  def initialize(employee)
+    @employee = employee
+  end
+
+  def perf_review
+    peer_reviews
+    manager_review
+    self_review
+  end
+
+  def peer_reviews
+    peers = lookup_peers
+    # ...
+  end
+
+  def lookup_peers
+    db.lookup(@employee, 'peers')
+  end
+
+  def manager_review
+    manager = lookup_manager
+    # ...
+  end
+
+  def lookup_manager
+    db.lookup(@employee, 'manager')
+  end
+
+  def self_review
+    # ...
+  end
+end
+
+review = PerformanceReview.new(employee)
+review.perf_review
 ```
 
 **[⬆ retornar ao topo](#sumário)**
