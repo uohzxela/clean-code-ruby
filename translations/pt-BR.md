@@ -14,6 +14,7 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   5. [Classes](#classes)
   6. [SOLID](#solid)
   7. [Testes](#testes)
+  8. [Lidando com Erros](#lidando-com-erros)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -1557,4 +1558,75 @@ describe 'Calculator' do
   end
 end
 ```
+**[⬆ retornar ao topo](#sumário)**
+
+## **Lidando com Erros**
+Erros lançados são uma coisa boa! Eles significam que em tempo de execução foi
+identificado quando algo em seu programa deu errado e está permitindo você saber
+ao parar a execução de uma função na pilha atual, matando o processo e
+notificando você nos logs com um rastreamento de pilha.
+
+### Não ignore erros apanhados
+Fazer nada com um erro apanhado não te permite corrigir ou reagir ao erro.
+Escrever o erro no log também não é muito melhor, já que muitas vezes ele pode
+se perder em um mar de outros registros no log. Se você envolveu qualquer
+pedaço de código em um `begin/rescue`, isso significa que você acha que um erro
+pode ocorrer ali e portanto você deveria ter um plano, ou criar um caminho com
+código, para quando isso ocorrer.
+
+**Ruim**
+```ruby
+require 'logger'
+
+logger = Logger.new(STDOUT)
+
+begin
+  function_that_might_throw()
+rescue StandardError => err
+  logger.info(err)
+end
+```
+
+**Bom**
+```ruby
+require 'logger'
+
+logger = Logger.new(STDOUT)
+# Mude o nível do logger para ERROR para mostrar apenas registros de nível ERROR ou superior
+logger.level = Logger::ERROR
+
+begin
+  function_that_might_throw()
+rescue StandardError => err
+  # Opção 1: Apenas registros de erros
+  logger.error(err)
+  # Opção 2: Notifique o usuário final através de uma interface
+  notify_user_of_error(err)
+  # Opção 3: Reporte o erro para um serviço de terceiro como Honeybadger
+  report_error_to_service(err)
+  # OU faça todas as três!
+end
+```
+
+### Forneça Contexto com Exceções
+Use um nome de classe de erro descritivo e uma mensagem quando você lançar um
+erro. Dessa forma você sabe porque o erro ocorreu e pode resgatar o tipo
+específico de erro.
+
+**Ruim**
+```ruby
+def initialize(user)
+  fail unless user
+  ...
+end
+```
+
+**Bom**
+```ruby
+def initialize(user)
+  fail ArgumentError, 'Missing user' unless user
+  ...
+end
+```
+
 **[⬆ retornar ao topo](#sumário)**
