@@ -13,6 +13,7 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   4. [Objetos e Estruturas de Dado](#objetos-e-estruturas-de-dado)
   5. [Classes](#classes)
   6. [SOLID](#solid)
+  7. [Testes](#testes)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -1494,5 +1495,66 @@ end
 # facilmente substituir nosso módulo de request por um novo que use WebSockets.
 inventory_tracker = InventoryTracker.new(['apples', 'bananas'], InventoryRequesterV2.new)
 inventory_tracker.request_items
+```
+**[⬆ retornar ao topo](#sumário)**
+
+## **Testes**
+Testar é mais importante do que colocar em produção. Se você não tem testes ou
+tem uma quantidade inadequada, então toda vez que você colocar seu código em
+produção você não vai ter certeza que não quebrou algo. Decidir o que constitui
+uma quantidade adequada é tarefa da sua equipe, mas ter 100% de cobertura (todas
+as declarações e ramos/caminhos) é como você atingi uma confiança muito alta
+e paz de espírito como desenvolvedor. Isso significa que além de ter um bom
+framework de testes, você também precisa de uma
+[boa ferramenta de cobertura](https://coveralls.io/).
+
+Não existem desculpas para não escrever testes. Ruby vem com sua própria
+ferramenta de teste, direto com a linguagem. Tenha como objetivo sempre escrever
+testes para cada nova funcionalidade ou módulo que você introduzir. Se seu
+método preferido é Desenvolvimento Guiado por Testes (TDD), isso é ótimo, mas
+o ponto principal é apenas se certificar que você está alcançando suas metas de
+cobertura antes de lançar qualquer funcionalidade ou refatorar uma existente.
+
+### Uma Expectativa por Teste
+
+**Ruim:**
+```ruby
+require 'rspec'
+
+describe 'Calculator' do
+  let(:calculator) { Calculator.new }
+
+  it 'performs addition, subtraction, multiplication and division' do
+    expect(calculator.calculate('1 + 2')).to eq(3)
+    expect(calculator.calculate('4 - 2')).to eq(2)
+    expect(calculator.calculate('2 * 3')).to eq(6)
+    expect(calculator.calculate('6 / 2')).to eq(3)
+  end
+end
+```
+
+**Bom:**
+```ruby
+require 'rspec'
+
+describe 'Calculator' do
+  let(:calculator) { Calculator.new }
+
+  it 'performs addition' do
+    expect(calculator.calculate('1 + 2')).to eq(3)
+  end
+
+  it 'performs subtraction' do
+    expect(calculator.calculate('4 - 2')).to eq(2)
+  end
+
+  it 'performs multiplication' do
+    expect(calculator.calculate('2 * 3')).to eq(6)
+  end
+
+  it 'performs division' do
+    expect(calculator.calculate('6 / 2')).to eq(3)
+  end
+end
 ```
 **[⬆ retornar ao topo](#sumário)**
