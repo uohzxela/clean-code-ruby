@@ -16,6 +16,7 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   7. [Testes](#testes)
   8. [Lidando com Erros](#lidando-com-erros)
   9. [Formatação](#formatação)
+  10. [Comentários](#comentários)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -1768,4 +1769,47 @@ review = PerformanceReview.new(employee)
 review.perf_review
 ```
 
+**[⬆ retornar ao topo](#sumário)**
+
+## **Comentários**
+
+### Não deixe código comentado na sua base de códigos
+Controle de versão existe por um motivo. Deixe código velho no seu histórico.
+
+**Ruim**
+```ruby
+do_stuff
+# do_other_stuff
+# do_some_more_stuff
+# do_so_much_stuff
+```
+
+**Bom**
+```ruby
+do_stuff
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Não tenha comentários de anotações
+Lembre-se, use o controle de versão! Não há razão para código morto, código
+comentado e especialmente comentários de anotações. Use `git log` para consultar
+seu histórico!
+
+**Ruim**
+```ruby
+# 2016-12-20: Removed monads, didn't understand them (RM)
+# 2016-10-01: Improved using special monads (JP)
+# 2016-02-03: Removed type-checking (LI)
+# 2015-03-14: Added combine with type-checking (JR)
+def combine(a, b)
+  a + b
+end
+```
+
+**Bom**
+```ruby
+def combine(a, b)
+  a + b
+end
+```
 **[⬆ retornar ao topo](#sumário)**
