@@ -11,6 +11,8 @@ Inspirado por [clean-code-javascript](https://github.com/ryanmcdermott/clean-cod
   2. [Variáveis](#variáveis)
   3. [Funções](#funções)
   4. [Objetos e Estruturas de Dado](#objetos-e-estruturas-de-dado)
+  5. [Classes](#classes)
+  6. [SOLID](#solid)
 
   ## Introdução
 Imagem bem-humorada sobre estimativa de qualidade de software de acordo com
@@ -1049,5 +1051,448 @@ class Employee
   end
   # ...
 end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+## **SOLID**
+### Princípio de Responsabilidade Única (*SRP - Single Responsibility Principle*)
+Conforme exposto no livro *Clean Code*, "Nunca deve existir mais do que uma razão
+para uma classe mudar". É tentador colocar em uma classe um monte de
+funcionalidades atoladas, da mesma forma de quando você só pode levar uma mala
+de viagem no seu voo. O problema nisso é que sua classe não será conceitualmente
+coesiva e ela terá muitas razões para mudar. Minimizar a quantidade de vezes
+que você precisa mudar a classe é importante. É importante porque se muita
+funcionalidade está em uma classe e você modifica uma parte dela, pode ser
+difícil entender como isso irá afetar os outros módulos que dependem da sua
+base de código.
+
+**Ruim**
+```ruby
+class UserSettings
+  def initialize(user)
+    @user = user
+  end
+
+  def change_settings(settings)
+    return unless valid_credentials?
+    # ...
+  end
+
+  def valid_credentials?
+    # ...
+  end
+end
+```
+
+**Bom**
+```ruby
+class UserAuth
+  def initialize(user)
+    @user = user
+  end
+
+  def valid_credentials?
+    # ...
+  end
+end
+
+class UserSettings
+  def initialize(user)
+    @user = user
+    @auth = UserAuth.new(user)
+  end
+
+  def change_settings(settings)
+    return unless @auth.valid_credentials?
+    # ...
+  end
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+###  Princípio Aberto/Fechado (*OCP - Open/Closed Principle*)
+Conforme exposto por Bertrand Meyer, "Entidade de software (classes, módulos,
+funções, etc.) deveriam estar abertas para extensão, mas fechadas para
+modificação." O que isso significa? Esse princípio basicamente especifica que
+você deveria permitir um usuário adicionar funcionalidades sem ter que alterar
+código que já existe.
+
+**Ruim**
+```ruby
+class Adapter
+  attr_reader :name
+end
+
+class AjaxAdapter < Adapter
+  def initialize
+    super()
+    @name = 'ajaxAdapter'
+  end
+end
+
+class NodeAdapter < Adapter
+  def initialize
+    super()
+    @name = 'nodeAdapter'
+  end
+end
+
+class HttpRequester
+  def initialize(adapter)
+    @adapter = adapter
+  end
+
+  def fetch(url)
+    adapter_name = @adapter.name
+
+    if adapter_name == 'ajaxAdapter'
+      make_ajax_call(url)
+    elsif adapter_name == 'httpNodeAdapter'
+      make_http_call(url)
+    end
+  end
+
+  def make_ajax_call(url)
+    # ...
+  end
+
+  def make_http_call(url)
+    # ...
+  end
+end
+```
+
+**Bom**
+```ruby
+class Adapter
+  attr_reader :name
+end
+
+class AjaxAdapter < Adapter
+  def initialize
+    super()
+    @name = 'ajaxAdapter'
+  end
+
+  def request(url)
+    # ...
+  end
+end
+
+class NodeAdapter < Adapter
+  def initialize
+    super()
+    @name = 'nodeAdapter'
+  end
+
+  def request(url)
+    # ...
+  end
+end
+
+class HttpRequester
+  def initialize(adapter)
+    @adapter = adapter
+  end
+
+  def fetch(url)
+    @adapter.request(url)
+  end
+end
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Princípio de Substituição de Liskov (*LSP - Liskov Substitution Principle*)
+Esse é um termo assustador para um conceito muito simples. Ele é formalmente
+definido como "Se S é um subtipo de T, então objetos do tipo T podem ser
+substituídos por objetos do tipo S sem termos que alterar nenhuma propriedade
+desejável daquele programa (exatidão, tarefa executada, etc.)".
+Essa é uma definição ainda mais assustadora. Em outras palavras, objetos do tipo
+S podem substituir objetos do tipo T.
+
+
+A melhor explicação para isso é que se você tem uma classe pai e uma classe
+filha, então a classe pai pode sempre ser substituída pela classe filha sem
+termos resultados incorretos. Isso pode continuar confuso, então vamos dar uma
+olhada no exemplo clássico de Quadrado e Retângulo. Matematicamente, um
+quadrado é um retângulo, mas se seu modelo está uma relação "é um" através de
+herança, você rapidamente se encontra em um problema.
+
+**Ruim**
+```ruby
+class Rectangle
+  def initialize
+    @width  = 0
+    @height = 0
+  end
+
+  def color=(color)
+    # ...
+  end
+
+  def render(area)
+    # ...
+  end
+
+  def width=(width)
+    @width = width
+  end
+
+  def height=(height)
+    @height = height
+  end
+
+  def area
+    @width * @height
+  end
+end
+
+class Square < Rectangle
+  def width=(width)
+    @width  = width
+    @height = width
+  end
+
+  def height=(height)
+    @width  = height
+    @height = height
+  end
+end
+
+def render_large_rectangles(rectangles)
+  rectangles.each do |rectangle|
+    rectangle.width = 4
+    rectangle.height = 5
+    area = rectangle.area # Ruim: Retorna 25 para Square. Deveria ser 20.
+    rectangle.render(area)
+  end
+end
+
+rectangles = [Rectangle.new, Rectangle.new, Square.new]
+render_large_rectangles(rectangles)
+```
+
+**Bom**
+```ruby
+class Shape
+  def color=(color)
+    # ...
+  end
+
+  def render(area)
+    # ...
+  end
+end
+
+class Rectangle < Shape
+  def initialize(width, height)
+    super()
+    @width = width
+    @height = height
+  end
+
+  def area
+    @width * @height
+  end
+end
+
+class Square < Shape
+  def initialize(length)
+    super()
+    @length = length
+  end
+
+  def area
+    @length * @length
+  end
+end
+
+def render_large_shapes(shapes)
+  shapes.each do |shape|
+    area = shape.area
+    shape.render(area)
+  end
+end
+
+shapes = [Rectangle.new(4, 5), Rectangle.new(4, 5), Square.new(5)]
+render_large_shapes(shapes)
+```
+**[⬆ retornar ao topo](#sumário)**
+
+### Princípio de Segregação de Interface (*ISP - Interface Segregation Principle*)
+Ruby não tem interfaces (como em Java, por exemplo), então esse princípio não se
+aplica tão rigorosamente como em outras linguagens. No entanto, é importante e
+relevante mesmo com a falta de tipos em Ruby.
+
+Esse princípio declara que "Clientes não deveriam ser forçados a dependerem de
+interfaces que não usam." Interfaces são contratos implícitos em Ruby por causa
+do *duck typing*.
+
+Quando um cliente depende de uma classe que contém interfaces que ele
+não usa, mas outros cliente usam, então aquele cliente será afetado por
+mudanças que outros clientes forçam sobre a classe das interfaces.
+
+O exemplo a seguir foi tirado [daqui](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
+
+
+**Ruim**
+```ruby
+class Car
+  # usado por Driver
+  def open
+    # ...
+  end
+
+  # usado por Driver
+  def start_engine
+    # ...
+  end
+
+  # usado por Mechanic
+  def change_engine
+    # ...
+  end
+end
+
+class Driver
+  def drive
+    @car.open
+    @car.start_engine
+  end
+end
+
+class Mechanic
+  def do_stuff
+    @car.change_engine
+  end
+end
+
+```
+
+**Bom**
+```ruby
+# usado por Driver apenas
+class Car
+  def open
+    # ...
+  end
+
+  def start_engine
+    # ...
+  end
+end
+
+# usado por Mechanic apenas
+class CarInternals
+  def change_engine
+    # ...
+  end
+end
+
+class Driver
+  def drive
+    @car.open
+    @car.start_engine
+  end
+end
+
+class Mechanic
+  def do_stuff
+    @car_internals.change_engine
+  end
+end
+```
+
+**[⬆ retornar ao topo](#sumário)**
+
+### Princípio de Inversão de Dependências (*DIP - Dependency Inversion Principle*)
+Esse princípio declara duas coisas essenciais:
+1. Módulos de alto nível não deveriam depender de módulos de baixo nível. Ambos
+deveriam depender de abstrações.
+2. Abstrações não deveriam depender de detalhes. Detalhes deveriam depender de
+abstrações.
+
+Colocando de forma simples, esse princípio mantém módulos de alto nível sem
+saberem de detalhes de seus módulos de baixo nível e suas configurações. Isso
+pode ser alcançado através de inversão de dependências. Um grande benefício disso
+é a redução de acoplamento entre módulos. Acoplamento é muito ruim em
+padrões de desenvolvimento porque torna seu código difícil de ser refatorado.
+
+Como dito anteriormente, Ruby não tem interfaces, então as abstrações tem
+dependências em contratos subentendidos. Isso que dizer os métodos e
+propriedades que uma classe/objeto expõem para outra classe/objeto. No exemplo
+abaixo, o contrato subentendido é que qualquer módulo de *Request* para um
+objeto da classe `InventoryTracker` terá um método `request_items`.
+
+**Ruim**
+```ruby
+class InventoryRequester
+  def initialize
+    @req_methods = ['HTTP']
+  end
+
+  def request_item(item)
+    # ...
+  end
+end
+
+class InventoryTracker
+  def initialize(items)
+    @items = items
+
+    # Ruim: Nós criamos uma dependência em uma implementação específica de request
+    @requester = InventoryRequester.new
+  end
+
+  def request_items
+    @items.each do |item|
+      @requester.request_item(item)
+    end
+  end
+end
+
+inventory_tracker = InventoryTracker.new(['apples', 'bananas'])
+inventory_tracker.request_items
+```
+
+**Bom**
+```ruby
+class InventoryTracker
+  def initialize(items, requester)
+    @items = items
+    @requester = requester
+  end
+
+  def request_items
+    @items.each do |item|
+      @requester.request_item(item)
+    end
+  end
+end
+
+class InventoryRequesterV1
+  def initialize
+    @req_methods = ['HTTP']
+  end
+
+  def request_item(item)
+    # ...
+  end
+end
+
+class InventoryRequesterV2
+  def initialize
+    @req_methods = ['WS']
+  end
+
+  def request_item(item)
+    # ...
+  end
+end
+
+# Ao construir nossas dependências externamente e injeta-las, nós podemos
+# facilmente substituir nosso módulo de request por um novo que use WebSockets.
+inventory_tracker = InventoryTracker.new(['apples', 'bananas'], InventoryRequesterV2.new)
+inventory_tracker.request_items
 ```
 **[⬆ retornar ao topo](#sumário)**
