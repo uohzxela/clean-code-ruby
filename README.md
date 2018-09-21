@@ -17,6 +17,7 @@ Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-
   9. [Error Handling](#error-handling)
   10. [Formatting](#formatting)
   11. [Comments](#comments)
+  12. [Translations](#translations)
 
 ## Introduction
 ![Humorous image of software quality estimation as a count of how many expletives
@@ -1780,4 +1781,12 @@ def combine(a, b)
   a + b
 end
 ```
+**[⬆ back to top](#table-of-contents)**
+
+## Translations
+
+This is also available in other languages:
+
+  - [Brazilian Portuguese](https://github.com/uohzxela/clean-code-ruby/blob/master/translations/pt-BR.md)
+
 **[⬆ back to top](#table-of-contents)**
