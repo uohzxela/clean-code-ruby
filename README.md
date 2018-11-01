@@ -1027,8 +1027,8 @@ end
 
 class Employee
   def initialize(name, email)
-    this.name = name
-    this.email = email
+    @name = name
+    @email = email
   end
 
   def set_tax_data(ssn, salary)
