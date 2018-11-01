@@ -769,8 +769,8 @@ good tests, and have good code reviews.
 ```ruby
 def combine(val1, val2)
   if (val1.is_a?(Numeric) && val2.is_a?(Numeric)) ||
-     (val1.is_a?(String) && va2.is_a?(String))
-    val1 + val2
+     (val1.is_a?(String) && val2.is_a?(String))
+    return val1 + val2
   end
 
   raise 'Must be of type String or Numeric'
