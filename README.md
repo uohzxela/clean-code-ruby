@@ -295,7 +295,7 @@ end
 
 date = DateTime.now
 
-# It's hard to to tell from the function name what is added
+# It's hard to tell from the function name what is added
 add_to_date(date, 1)
 ```
 
