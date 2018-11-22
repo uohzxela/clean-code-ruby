@@ -629,8 +629,7 @@ programmer_output = [
 
 INITIAL_VALUE = 0
 
-total_output = programmer_output
-               .reduce(INITIAL_VALUE) { |acc, output| acc + output[:lines_of_code] }
+total_output = programmer_output.sum(INITIAL_VALUE) { |output| output[:lines_of_code] }
 ```
 **[⬆ back to top](#table-of-contents)**
 
