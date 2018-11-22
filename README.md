@@ -273,9 +273,11 @@ end
 **Good:**
 ```ruby
 def email_active_clients(clients)
-  clients
-    .select(&method(:active_client?))
-    .each(&method(:email))
+  active_clients.each { |client| email(client) }
+end
+
+def active_clients
+  clients.select { |client| active_client?(client) }
 end
 
 def active_client?(client)
