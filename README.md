@@ -268,15 +268,17 @@ def email_clients(clients)
     email(client) if client_record.active?
   end
 end
+
+email_clients(clients)
 ```
 
 **Good:**
 ```ruby
-def email_active_clients(clients)
-  active_clients.each { |client| email(client) }
+def email_clients(clients)
+  clients.each { |client| email(client) }
 end
 
-def active_clients
+def active_clients(clients)
   clients.select { |client| active_client?(client) }
 end
 
@@ -284,6 +286,8 @@ def active_client?(client)
   client_record = database.lookup(client)
   client_record.active?
 end
+
+email_clients(active_clients(clients))
 ```
 **[⬆ back to top](#table-of-contents)**
 
