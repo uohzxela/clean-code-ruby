@@ -492,8 +492,8 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid Side Effects (part 1)
-A function produces a side effect if it does anything other than take a value in
-and return another value or values. A side effect could be writing to a file,
+A function produces side effects if it does anything more than take values and/or
+return values. A side effect could be writing to a file,
 modifying some global variable, or accidentally wiring all your money to a
 stranger.
 
