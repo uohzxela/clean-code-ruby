@@ -738,7 +738,7 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid type-checking (part 1)
-Ruby is untyped, which means your functions can take any type of argument.
+Ruby is dynamically typed, which means your functions can take any type of argument.
 Sometimes you are bitten by this freedom and it becomes tempting to do
 type-checking in your functions. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
@@ -1619,7 +1619,7 @@ For things that don't fall under the purview of automatic formatting
 for some guidance.
 
 ### Use consistent capitalization
-Ruby is untyped, so capitalization tells you a lot about your variables,
+Ruby is dynamically typed, so capitalization tells you a lot about your variables,
 functions, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
 
