@@ -1147,11 +1147,10 @@ class HttpRequester
   end
 
   def fetch(url)
-    adapter_name = @adapter.name
-
-    if adapter_name == 'ajaxAdapter'
+    case @adapter.name
+    when 'ajaxAdapter'
       make_ajax_call(url)
-    elsif adapter_name == 'nodeAdapter'
+    when 'nodeAdapter'
       make_http_call(url)
     end
   end
