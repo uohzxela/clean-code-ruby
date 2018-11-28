@@ -1135,7 +1135,7 @@ class HttpRequester
 
     if adapter_name == 'ajaxAdapter'
       make_ajax_call(url)
-    elsif adapter_name == 'httpNodeAdapter'
+    elsif adapter_name == 'nodeAdapter'
       make_http_call(url)
     end
   end
