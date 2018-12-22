@@ -63,6 +63,7 @@ current_date = Time.now.strftime('%Y/%m/%d')
 ### Use the same vocabulary for the same type of variable
 
 Pick one word for the concept and stick to it.
+
 **Bad:**
 ```ruby
 user_info
