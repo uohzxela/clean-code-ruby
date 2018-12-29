@@ -233,23 +233,18 @@ properties are being used.
 
 **Bad:**
 ```ruby
-def create_menu(title, body, button_text, cancellable)
+def create_menu(title, body)
   # ...
 end
 ```
 
 **Good:**
 ```ruby
-def create_menu(title:, body:, button_text:, cancellable:)
+def create_menu(title:, body:)
   # ...
 end
 
-create_menu(
-  title: 'Foo',
-  body: 'Bar',
-  button_text: 'Baz',
-  cancellable: true
-)
+create_menu(title: 'Foo', body: 'Bar')
 ```
 **[⬆ back to top](#table-of-contents)**
 
