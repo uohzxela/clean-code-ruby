@@ -350,7 +350,7 @@ end
 
 **Good:**
 ```ruby
-def interpet(code)
+def interpret(code)
   tokens = tokenize(code)
   ast = lex(tokens)
   parse(ast)
