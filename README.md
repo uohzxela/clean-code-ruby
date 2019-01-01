@@ -1667,11 +1667,11 @@ class PerformanceReview
   end
 
   def lookup_peers
-    db.lookup(@employee, 'peers')
+    db.lookup(@employee, :peers)
   end
 
   def lookup_manager
-    db.lookup(@employee, 'manager')
+    db.lookup(@employee, :manager)
   end
 
   def peer_reviews
@@ -1718,7 +1718,7 @@ class PerformanceReview
   end
 
   def lookup_peers
-    db.lookup(@employee, 'peers')
+    db.lookup(@employee, :peers)
   end
 
   def manager_review
@@ -1727,7 +1727,7 @@ class PerformanceReview
   end
 
   def lookup_manager
-    db.lookup(@employee, 'manager')
+    db.lookup(@employee, :manager)
   end
 
   def self_review
