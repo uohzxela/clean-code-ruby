@@ -9,7 +9,7 @@ Inspired by [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-
 ## Table of Contents
   1. [Introduction](#introduction)
   2. [Variables](#variables)
-  3. [Functions](#functions)
+  3. [Methods](#methods)
   4. [Objects and Data Structures](#objects-and-data-structures)
   5. [Classes](#classes)
   6. [SOLID](#solid)
@@ -190,7 +190,7 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Use default arguments instead of short circuiting or conditionals
-Default arguments are often cleaner than short circuiting. Be aware that if you use them, your function will only provide default values for undefined arguments. Other "falsy" values such as `false` and `nil` will not be replaced by a default value.
+Default arguments are often cleaner than short circuiting. Be aware that if you use them, your method will only provide default values for undefined arguments. Other "falsy" values such as `false` and `nil` will not be replaced by a default value.
 
 **Bad:**
 ```ruby
@@ -208,26 +208,26 @@ end
 ```
 **[⬆ back to top](#table-of-contents)**
 
-## **Functions**
-### Function arguments (2 or fewer ideally)
-Limiting the amount of function parameters is incredibly important because it
-makes testing your function easier. Having more than three leads to a
+## **Methods**
+### Method arguments (2 or fewer ideally)
+Limiting the amount of method parameters is incredibly important because it
+makes testing your method easier. Having more than three leads to a
 combinatorial explosion where you have to test tons of different cases with
 each separate argument.
 
 One or two arguments is the ideal case, and three should be avoided if possible.
 Anything more than that should be consolidated. Usually, if you have
-more than two arguments then your function is trying to do too much. In cases
+more than two arguments then your method is trying to do too much. In cases
 where it's not, most of the time a higher-level object will suffice as an
-argument. Or you can pass data to the function by instance variables.
+argument. Or you can pass data to the method by instance variables.
 
 Since Ruby allows you to make objects on the fly, without a lot of class
 boilerplate, you can use an object if you are finding yourself needing a
 lot of arguments. The prevailing pattern in Ruby is to use a hash of arguments.
 
-To make it obvious what properties the function expects, you can use the keyword arguments syntax (introduced in Ruby 2.1). This has a few advantages:
+To make it obvious what properties the method expects, you can use the keyword arguments syntax (introduced in Ruby 2.1). This has a few advantages:
 
-1. When someone looks at the function signature, it's immediately clear what
+1. When someone looks at the method signature, it's immediately clear what
 properties are being used.
 2. If a required keyword argument is missing, Ruby will raise a useful `ArgumentError` that tells us which required argument we must include.
 
@@ -249,10 +249,10 @@ create_menu(title: 'Foo', body: 'Bar')
 **[⬆ back to top](#table-of-contents)**
 
 
-### Functions should do one thing
-This is by far the most important rule in software engineering. When functions
+### Methods should do one thing
+This is by far the most important rule in software engineering. When methods
 do more than one thing, they are harder to compose, test, and reason about.
-When you can isolate a function to just one action, they can be refactored
+When you can isolate a method to just one action, they can be refactored
 easily and your code will read much cleaner. If you take nothing else away from
 this guide other than this, you'll be ahead of many developers.
 
@@ -287,7 +287,7 @@ email_clients(active_clients(clients))
 ```
 **[⬆ back to top](#table-of-contents)**
 
-### Function names should say what they do
+### Method names should say what they do
 Poorly named methods add to the code reviewer's cognitive load at best, and mislead the
 code reviewer at worst. Strive to capture the the precise intent when naming methods.
 
@@ -299,7 +299,7 @@ end
 
 date = DateTime.now
 
-# It's hard to tell from the function name what is added
+# It's hard to tell from the method name what is added
 add_to_date(date, 1)
 ```
 
@@ -314,10 +314,10 @@ add_month_to_date(date, 1)
 ```
 **[⬆ back to top](#table-of-contents)**
 
-### Functions should only be one level of abstraction
-When you have more than one level of abstraction your function is usually
-doing too much. Splitting up functions leads to reusability and easier
-testing. Furthermore, functions should descend by the level of abstraction: one very abstract function should call methods that are less abstract and so on.
+### Methods should only be one level of abstraction
+When you have more than one level of abstraction your method is usually
+doing too much. Splitting up methods leads to reusability and easier
+testing. Furthermore, methods should descend by the level of abstraction: one very abstract method should call methods that are less abstract and so on.
 
 **Bad:**
 ```ruby
@@ -404,9 +404,9 @@ tomatoes in them. If you only have one list, there's only one place to update!
 
 Oftentimes you have duplicate code because you have two or more slightly
 different things, that share a lot in common, but their differences force you
-to have two or more separate functions that do much of the same things. Removing
+to have two or more separate methods that do much of the same things. Removing
 duplicate code means creating an abstraction that can handle this set of
-different things with just one function/module/class.
+different things with just one method/module/class.
 
 Getting the abstraction right is critical, that's why you should follow the
 SOLID principles laid out in the *Classes* section. Bad abstractions can be
@@ -463,8 +463,8 @@ end
 ```
 **[⬆ back to top](#table-of-contents)**
 
-### Don't use flags as function parameters
-Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
+### Don't use flags as method parameters
+Flags tell your user that this method does more than one thing. Methods should do one thing. Split out your methods if they are following different code paths based on a boolean.
 
 **Bad:**
 ```ruby
@@ -490,14 +490,14 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid Side Effects (part 1)
-A function produces side effects if it does anything more than take values and/or
+A method produces side effects if it does anything more than take values and/or
 return values. A side effect could be writing to a file,
 modifying some global variable, or accidentally wiring all your money to a
 stranger.
 
 Now, you do need to have side effects in a program on occasion. Like the previous
 example, you might need to write to a file. What you want to do is to
-centralize where you are doing this. Don't have several functions and classes
+centralize where you are doing this. Don't have several methods and classes
 that write to a particular file. Have one service that does it. One and only one.
 
 The main point is to avoid common pitfalls like sharing state between objects
@@ -507,8 +507,8 @@ be happier than the vast majority of other programmers.
 
 **Bad:**
 ```ruby
-# Global variable referenced by following function.
-# If we had another function that used this name, now it'd be an array and it could break it.
+# Global variable referenced by following method.
+# If we had another method that used this name, now it'd be an array and it could break it.
 $name = 'Ryan McDermott'
 
 def split_into_first_and_last_name
@@ -535,24 +535,24 @@ puts first_and_last_name # ['Ryan', 'McDermott']
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid Side Effects (part 2)
-In Ruby, everything is an object and everything is passed by value, but these values are references to objects. In the case of objects and arrays, if your function makes a change
+In Ruby, everything is an object and everything is passed by value, but these values are references to objects. In the case of objects and arrays, if your method makes a change
 in a shopping cart array, for example, by adding an item to purchase,
-then any other function that uses that `cart` array will be affected by this
+then any other method that uses that `cart` array will be affected by this
 addition. That may be great, however it can be bad too. Let's imagine a bad
 situation:
 
-The user clicks the "Purchase", button which calls a `purchase` function that
+The user clicks the "Purchase", button which calls a `purchase` method that
 spawns a network request and sends the `cart` array to the server. Because
-of a bad network connection, the `purchase` function has to keep retrying the
+of a bad network connection, the `purchase` method has to keep retrying the
 request. Now, what if in the meantime the user accidentally clicks "Add to Cart"
 button on an item they don't actually want before the network request begins?
-If that happens and the network request begins, then that purchase function
+If that happens and the network request begins, then that purchase method
 will send the accidentally added item because it has a reference to a shopping
-cart array that the `add_item_to_cart` function modified by adding an unwanted
+cart array that the `add_item_to_cart` method modified by adding an unwanted
 item.
 
 A great solution would be for the `add_item_to_cart` to always clone the `cart`,
-edit it, and return the clone. This ensures that no other functions that are
+edit it, and return the clone. This ensures that no other methods that are
 holding onto a reference of the shopping cart will be affected by any changes.
 
 Two caveats to mention to this approach:
@@ -684,9 +684,9 @@ This seems like an impossible task. Upon first hearing this, most people say,
 "how am I supposed to do anything without an `if` statement?" The answer is that
 you can use polymorphism to achieve the same task in many cases. The second
 question is usually, "well that's great but why would I want to do that?" The
-answer is a previous clean code concept we learned: a function should only do
-one thing. When you have classes and functions that have `if` statements, you
-are telling your user that your function does more than one thing. Remember,
+answer is a previous clean code concept we learned: a method should only do
+one thing. When you have classes and methods that have `if` statements, you
+are telling your user that your method does more than one thing. Remember,
 just do one thing.
 
 **Bad:**
@@ -736,9 +736,9 @@ end
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid type-checking (part 1)
-Ruby is dynamically typed, which means your functions can take any type of argument.
+Ruby is dynamically typed, which means your methods can take any type of argument.
 Sometimes you are bitten by this freedom and it becomes tempting to do
-type-checking in your functions. There are many ways to avoid having to do this.
+type-checking in your methods. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
 
 **Bad:**
@@ -1311,7 +1311,7 @@ ISP states that "Clients should not be forced to depend upon interfaces that
 they do not use." Interfaces are implicit contracts in Ruby because of
 duck typing.
 
-When a client depends upon a class that contains interfaces that the client does not use, but that other clients do use, then that client will be affected by the changes that those other clients force upon the class. 
+When a client depends upon a class that contains interfaces that the client does not use, but that other clients do use, then that client will be affected by the changes that those other clients force upon the class.
 
 The following example is taken from [here](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
 
@@ -1539,7 +1539,7 @@ end
 ## **Error Handling**
 Thrown errors are a good thing! They mean the runtime has successfully
 identified when something in your program has gone wrong and it's letting
-you know by stopping function execution on the current stack, killing the
+you know by stopping method execution on the current stack, killing the
 process, and notifying you in the logs with a stack trace.
 
 ### Don't ignore caught errors
@@ -1556,7 +1556,7 @@ require 'logger'
 logger = Logger.new(STDOUT)
 
 begin
-  function_that_might_throw()
+  method_that_might_throw()
 rescue StandardError => err
   logger.info(err)
 end
@@ -1571,7 +1571,7 @@ logger = Logger.new(STDOUT)
 logger.level = Logger::ERROR
 
 begin
-  function_that_might_throw()
+  method_that_might_throw()
 rescue StandardError => err
   # Option 1: Only log errors
   logger.error(err)
@@ -1617,7 +1617,7 @@ for some guidance.
 
 ### Use consistent capitalization
 Ruby is dynamically typed, so capitalization tells you a lot about your variables,
-functions, etc. These rules are subjective, so your team can choose whatever
+methods, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
 
 **Bad:**
@@ -1654,8 +1654,8 @@ class Alpaca; end
 **[⬆ back to top](#table-of-contents)**
 
 
-### Function callers and callees should be close
-If a function calls another, keep those functions vertically close in the source
+### method callers and callees should be close
+If a method calls another, keep those methods vertically close in the source
 file. Ideally, keep the caller right above the callee. We tend to read code from
 top-to-bottom, like a newspaper. Because of this, make your code read that way.
 
