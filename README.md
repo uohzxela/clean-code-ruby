@@ -639,22 +639,30 @@ cart array that the `add_item_to_cart` method modified by adding an unwanted
 item.
 
 用户点击了购买按钮，这个按钮会调用一个`purchase`方法，这个方法会发生一个网络请求，然后把`cart`的值传到服务器。
-因为网络环境较差，`purchase`方法不得不重新发起请求。现在，
+因为网络环境较差，`purchase`方法不得不重新发起请求。现在，假设在网络请求开始的同时用户又不小心在一个他原本不想要的产品上点击了一下“加入购物车”按钮，
+假如这两个同时发生，那么`purchase方法就会把不小心加进购物车的产品一起结算了，因为它调用的数组正好是`add_item_to_cart`方法通过添加不想要的产品而修改过的数组的参考。
+译者注：（通常数组等在作为参数的时候，为了节约内存，编译器一般只会把数组的指针，即数组的地址传递给调用它的方法。因为Ruby中没有指针这样的概念，这里的reference意义和指针是一样的。）
 
 A great solution would be for the `add_item_to_cart` to always clone the `cart`,
 edit it, and return the clone. This ensures that no other methods that are
 holding onto a reference of the shopping cart will be affected by any changes.
+好的方案就是`add_item_to_cart`总是克隆`cart`,
+然后编辑它，然后返回克隆。这确保了没有别的方法会有购物车数组的参考，因此也不用担心它会被修改。
 
 Two caveats to mention to this approach:
+有两点需要说明的是：
   1. There might be cases where you actually want to modify the input object,
 but when you adopt this programming practice you will find that those cases
 are pretty rare. Most things can be refactored to have no side effects!
+  1.
+可能有一些情况，你确实希望修改输入的对象，但是当你适应这种编程实践的时候，你会发现这样的情况非常少见。大部分的情况可以在丝毫不影响的情况下进行重构。
 
   2. Cloning big objects can be very expensive in terms of performance. Luckily,
 this isn't a big issue in practice because there are
 [great gems](https://github.com/hamstergem/hamster) that allow
 this kind of programming approach to be fast and not as memory intensive as
 it would be for you to manually clone objects and arrays.
+2. 克隆大的对象在性能方面会有很大的影响。不过，幸运的是，因为有[hamster](https://github.com/hamstergem/hamster)。通过它，克隆大型对象在性能方面的牺牲可以忽略不计。
 
 **坏:**
 ```ruby
@@ -672,9 +680,12 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Favor functional programming over imperative programming
+### 与命令式编程相比，更喜欢函数式编程
+
 Ruby isn't a functional language in the way that Haskell is, but it has
 a functional flavor to it. Functional languages are cleaner and easier to test.
 Favor this style of programming when you can.
+Ruby不是函数式语言，就像Haskell一样，但是它也可以做到类似函数式编程。函数式语言更加清洁，也更容易测试。如果你可以，就用函数式的方式去编程。
 
 **坏:**
 ```ruby
@@ -726,6 +737,7 @@ total_output = programmer_output.sum(INITIAL_VALUE) { |output| output[:lines_of_
 **[⬆ 回到目录](#目录)**
 
 ### Encapsulate conditionals
+### 封装条件
 
 **坏:**
 ```ruby
@@ -747,6 +759,7 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Avoid negative conditionals
+### 避免否定条件
 
 **坏:**
 ```ruby
@@ -770,6 +783,7 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Avoid conditionals
+### 避免条件
 This seems like an impossible task. Upon first hearing this, most people say,
 "how am I supposed to do anything without an `if` statement?" The answer is that
 you can use polymorphism to achieve the same task in many cases. The second
@@ -778,6 +792,10 @@ answer is a previous clean code concept we learned: a method should only do
 one thing. When you have classes and methods that have `if` statements, you
 are telling your user that your method does more than one thing. Remember,
 just do one thing.
+第一次听到这句话的人的第一反应就是这好像是不可能完成的任务.
+"没有`if`我什么也干不了"。
+答案是在许多情况下，你都可以用多态来完成这些任务。第二个疑问通常是“为什么我要这么做？”。答案是之前我们学到的代码清洁的概念：方法应该只做一件事。
+如果你的类或方法中有`if`语句，你就在告诉你的用户，你的方法做了不止一件事情。记住，只做一件事情。
 
 **坏:**
 ```ruby
@@ -826,10 +844,13 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Avoid type-checking (part 1)
+### 避免类型检查（第一部分）
 Ruby is dynamically typed, which means your methods can take any type of argument.
 Sometimes you are bitten by this freedom and it becomes tempting to do
 type-checking in your methods. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
+Ruby是动态类型，也就是说你的方法可以传入任意类型的参数。有时这种自由可能会伤害你，因此有种情况可能会诱惑你在你的方法里做类型检查。
+有很多方法可以避免这样做。首先需要考虑的是一致的API。
 
 **坏:**
 ```ruby
@@ -851,12 +872,16 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Avoid type-checking (part 2)
+### 避免类型检查（第二部分）
+
 If you are working with basic values like strings and integers,
 and you can't use polymorphism but you still feel the need to type-check,
 you should consider using [contracts.ruby](https://github.com/egonSchiele/contracts.ruby). The problem with manually type-checking Ruby is that
 doing it well requires so much extra verbiage that the faux "type-safety" you get
 doesn't make up for the lost readability. Keep your Ruby clean, write
 good tests, and have good code reviews.
+假如你正使用基础的数据类型，如字符串或者整数，所以你没法使用多态这种解决方案，这时你应该考试使用[contracts.ruby](https://github.com/egonSchiele/contracts.ruby)。
+对于需要手动进行类型检查的Ruby代码的主要问题是获得“类型安全”的同时，牺牲了可读性。保持你的Ruby代码清洁，写好的测试代码，这样代码检查就容易了。
 
 **坏:**
 ```ruby
@@ -879,9 +904,13 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Remove dead code
+### 移除死代码
+
 Dead code is just as bad as duplicate code. There's no reason to keep it in
 your codebase. If it's not being called, get rid of it! It will still be safe
 in your version history if you still need it.
+死代码和重复的代码一样臭。没有理由在你的代码里保存它们。假如它不会被调用，去掉它！假如你需要的时候，你还是可以从代码仓库中找回它们。
+
 
 **坏:**
 ```ruby
@@ -909,10 +938,14 @@ inventory_tracker('apples', req, 'www.inventory-awesome.io')
 **[⬆ 回到目录](#目录)**
 
 ## **Objects and Data Structures**
+## **对象和数据结构**
 ### Use getters and setters
+### 使用getters和setters
+
 Using getters and setters to access data on objects could be better than simply
 looking for a property on an object. "Why?" you might ask. Well, here's an
 unorganized list of reasons why:
+使用getters和setters去获取一个对象的属性，可能比简单的查找对象的属性要好。为什么？你可能会问。嗯，这里有个没组织好的一些理由：
 
 * When you want to do more beyond getting an object property, you don't have
 to look up and change every accessor in your codebase.
@@ -921,7 +954,11 @@ to look up and change every accessor in your codebase.
 * Easy to add logging and error handling when getting and setting.
 * You can lazy load your object's properties, let's say getting it from a
 server.
-
+* 当你不仅仅要获取一个对象的属性的时候，你不必查找并且修改你代码库里的每个accessor。
+* 当你有`set`时，添加一些属性验证会很容易。
+* 封装内部的表达。
+* 当有getter和setter时，添加记录和错误处理就会比较容易。
+* 比如说你从服务器获取时，你可以延迟加载你的对象的属性。
 
 **坏:**
 ```ruby
@@ -968,6 +1005,7 @@ account.balance # => 100
 
 Alternatively, if your getters and setters are absolutely trivial, you should use `attr_accessor` to define them. This is especially convenient for implementing data-like objects which expose data to other parts of the system (e.g., ActiveRecord objects, response wrappers for remote APIs).
 
+假如你的getter和setter变得非常琐碎，你应该使用`attr_accessor`来定义他们。这个方法在实现数据类的对象时尤其方便，如ActiveRecord的对象，响应远程API调用的包装。
 **好：**
 ```ruby
 class Toy
@@ -981,6 +1019,7 @@ toy.price # => 50
 
 However, you have to be aware that in some situations, using `attr_accessor` is a code smell, read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
 
+然而，你必须意识到在有些情况，使用`attr_accessor`也是臭代码，你可以看看[这里](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html)
 **[⬆ 回到目录](#目录)**
 
 
