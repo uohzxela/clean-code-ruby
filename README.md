@@ -1024,23 +1024,32 @@ However, you have to be aware that in some situations, using `attr_accessor` is 
 
 
 ## **Classes**
+## **类**
 
 ### Avoid fluent interfaces
+### 避免流利的接口
 A [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) is an object
 oriented API that aims to improve the readability of the source code by using
-[method chaining](https://en.wikipedia.org/wiki/Method_chaining).
+[method chaining](https://en.wikipedia.org/wiki/Method_chaiing).
+[流利的接口](https://en.wikipedia.org/wiki/Fluent_interface)是面向对象的API，通过使用[方法链](https://en.wikipedia.org/wiki/Method_chaiing)来提高程序的可读性。
 
 While there can be some contexts, frequently builder objects, where this
 pattern reduces the verbosity of the code (e.g., ActiveRecord queries),
 more often it comes at some costs:
+当有一些情景，需要频繁的创建对象，这种模式可以让代码看起来更简洁（如ActiveRecord的查询），其他更多的情况，这样编码会有一些代价。
 
 1. Breaks [Encapsulation](https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29)
 2. Breaks [Decorators](https://en.wikipedia.org/wiki/Decorator_pattern)
 3. Is harder to [mock](https://en.wikipedia.org/wiki/Mock_object) in a test suite
 4. Makes diffs of commits harder to read
+1. 打破[封装](https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29)
+2. 打破[装饰器](https://en.wikipedia.org/wiki/Decorator_pattern)
+3. 在测试的时候，难以[mock](https://en.wikipedia.org/wiki/Mock_object)
+4. 让提交代码时的diff变得难以阅读。
 
 For more information you can read the full [blog post](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
 on this topic written by [Marco Pivetta](https://github.com/Ocramius).
+其他更多的信息，你可以阅读一下[Marco Pivetta](https://github.com/Ocramius)写的这篇[博客](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
 
 **坏:**
 ```ruby
@@ -1106,22 +1115,33 @@ car.save
 **[⬆ 回到目录](#目录)**
 
 ### Prefer composition over inheritance
+### 偏好使用Mixin多过继承
+
 As stated famously in [*Design Patterns*](https://en.wikipedia.org/wiki/Design_Patterns) by the Gang of Four,
 you should prefer composition over inheritance where you can. There are lots of
 good reasons to use inheritance and lots of good reasons to use composition.
 The main point for this maxim is that if your mind instinctively goes for
 inheritance, try to think if composition could model your problem better. In some
 cases, it can.
+正如在著名的[*设计模式*](https://en.wikipedia.org/wiki/Design_Patterns)这本书里提到的，你应该尽量使用Mixin，而不是继承。
+有许多好的理由使用继承，也有很多好的理由使用Mixin。主要在于你直觉选择了继承，可以尝试使用Mixin来模型化你的问题，结果可能会更好。
+在某些情况下，确实是这样的。
 
 You might be wondering then, "when should I use inheritance?" It
 depends on your problem at hand, but this is a decent list of when inheritance
 makes more sense than composition:
+你可能犹豫，“那什么时候我应该用继承呢？”这依赖于你的问题，但是有一个公认的列表，如果属于下面列出的情况，那么使用继承更合理。
+
 
 1. Your inheritance represents an "is-a" relationship and not a "has-a"
 relationship (Human->Animal vs. User->UserDetails).
 2. You can reuse code from the base classes (Humans can move like all animals).
 3. You want to make global changes to derived classes by changing a base class.
 (Change the caloric expenditure of all animals when they move).
+1. 你的继承代表了“是一个”的关系，而不是“有一个”的关系(Human->Animal vs. User->UserDetails)。
+2. 你可以复用基类的代码（人可以向动物一样移动）。
+3.
+你希望可以通过改变基类影响全部的子孙类。（当动物活动的时候，改变所有动物运动时所消耗的卡路里）
 
 **坏:**
 ```ruby
@@ -1173,6 +1193,7 @@ end
 
 ## **SOLID**
 ### Single Responsibility Principle (SRP)
+### 单一责任原则
 As stated in Clean Code, "There should never be more than one reason for a class
 to change". It's tempting to jam-pack a class with a lot of functionality, like
 when you can only take one suitcase on your flight. The issue with this is
@@ -1181,6 +1202,9 @@ to change. Minimizing the number of times you need to change a class is importan
 It's important because if too much functionality is in one class and you modify
 a piece of it, it can be difficult to understand how that will affect other
 dependent modules in your codebase.
+如同在清洁代码之道中所说，“修改类的原因不能超过一个”。给一个类添加许多功能，就好像要把它塞满一样，这种情形好像坐飞机的时候只能带一个行李箱。
+这会导致类从概念上缺少凝聚力，所以就会有很多理由去修改这个类。最小化你修改类的需求很重要。因为如果一个类中包含太多的功能会让你在修改哪怕其中的一小块代码，你也难于
+理解它会对其他代码造成什么样的影响。
 
 **坏:**
 ```ruby
@@ -1227,10 +1251,15 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Open/Closed Principle (OCP)
+### 开/闭原则（OCP）
 As stated by [Bertrand Meyer](https://en.wikipedia.org/wiki/Bertrand_Meyer), "software entities (classes, modules, functions,
 etc.) should be open for extension, but closed for modification." What does that
 mean though? This principle basically states that you should allow users to
 add new functionalities without changing existing code.
+
+如[Bertrand Meyer](https://en.wikipedia.org/wiki/Bertrand_Meyer) 所说,
+“软件中的实体（类、模块、方法等）应该对扩展是开放的，但是对修改是关闭的。”什么意思呢？这个原则基本是在说你应该允许其他人在不修改现存代码的情况下就添加新的功能。
+
 
 **坏:**
 ```ruby
@@ -1317,11 +1346,14 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Liskov Substitution Principle (LSP)
+### 里氏替换原则（LSP）
 This is a scary term for a very simple concept. It's formally defined as "If S
 is a subtype of T, then objects of type T may be replaced with objects of type S
 (i.e., objects of type S may substitute objects of type T) without altering any
 of the desirable properties of that program (correctness, task performed,
 etc.)." That's an even scarier definition.
+这个概念本身很简单，不过它的名字却有点唬人。它正式的定义是“假如S是T的子类型，那么类型为T的对象应该都可以被类型为S的对象替换，也不会改变程序的属性（正确性、任务执行等）。”
+（例如，类型S的对象可能替换类型T的对象）这个定义听起来更吓人。
 
 The best explanation for this is if you have a parent class and a child class,
 then the base class can always be replaced by the child class without getting
@@ -1329,6 +1361,8 @@ incorrect results. This might still be confusing, so let's take a look at the
 classic Square-Rectangle example. Mathematically, a square is a rectangle, but
 if you model it using the "is-a" relationship via inheritance, you quickly
 get into trouble.
+对这个原则最佳的解释是假如你有一个父类和子类，那么父类即便用子类替换了，也不会引发错误。这可能依然会让人迷糊，所以我们看一下经典的Square-Rectangle例子。
+从数学的角度来说，正方形是矩形的一种，但是假如你通过继承来模型化它，你很快就会遇到麻烦。
 
 **坏:**
 ```ruby
@@ -1432,17 +1466,23 @@ render_large_shapes(shapes)
 **[⬆ 回到目录](#目录)**
 
 ### Interface Segregation Principle (ISP)
+### 接口隔离原则(ISP)
 Ruby doesn't have interfaces so this principle doesn't apply as strictly
 as others. However, it's important and relevant even with Ruby's lack of
 type system.
+Ruby没有接口，所以对Ruby来说这个原则不像其他语言要求那么严格。然而，它是重要的，甚至和Ruby的类型系统缺失相关。
 
 ISP states that "Clients should not be forced to depend upon interfaces that
 they do not use." Interfaces are implicit contracts in Ruby because of
 duck typing.
+ISP是说“客户不应该被强迫去依赖他们不使用的接口。”
+因为鸭子类型，所以在Ruby中接口是隐式的合同。
 
 When a client depends upon a class that contains interfaces that the client does not use, but that other clients do use, then that client will be affected by the changes that those other clients force upon the class.
 
-The following example is taken from [here](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
+当客户依赖包含接口的类，但客户不会使用这个接口，但是其他的客户使用了，那么这个客户就会在其他客户需要修改这个接口时受到影响。
+
+下面的例子是来源于[here](http://geekhmer.github.io/blog/2015/03/18/interface-segregation-principle-in-ruby/).
 
 **坏:**
 ```ruby
@@ -1515,23 +1555,32 @@ end
 **[⬆ 回到目录](#目录)**
 
 ### Dependency Inversion Principle (DIP)
+### 依赖反转原则（DIP）
+
 This principle states two essential things:
 1. High-level modules should not depend on low-level modules. Both should
 depend on abstractions.
 2. Abstractions should not depend upon details. Details should depend on
 abstractions.
+这个原则说明了两个必要的事情：
+1. 高阶的模块不应该依赖于低阶的模块。它们都应该依赖于抽象。
+2. 抽象不应该依赖于细节。细节应该依赖于抽象。
 
 Simply put, DIP keeps high-level
 modules from knowing the details of its low-level modules and setting them up.
 It can accomplish this through DI. A huge benefit of this is that it reduces
 the coupling between modules. Coupling is a very bad development pattern because
 it makes your code hard to refactor.
+简单来说，DIP可以防止高阶的模块了解低阶模块的细节，这样可以模块之间的耦合。耦合是很差的开发模式，它可以让代码难以重构。
 
 As stated previously, Ruby doesn't have interfaces so the abstractions
 that are depended upon are implicit contracts. That is to say, the methods
 and properties that an object/class exposes to another object/class. In the
 example below, the implicit contract is that any Request module for an
 `InventoryTracker` will have a `request_items` method.
+如之前所说，Ruby没有接口，所以被依赖的抽象是隐式的合同。也就是对象或者类暴露给别的对象和类的方法。在下面的例子里，隐式的合同是为`InventoryTracker`类的任意Request模块，
+都有一个`request_items`方法。
+
 
 **坏:**
 ```ruby
@@ -1607,6 +1656,7 @@ inventory_tracker.request_items
 **[⬆ 回到目录](#目录)**
 
 ## **Testing**
+## **测试**
 Testing is more important than shipping. If you have no tests or an
 inadequate amount, then every time you ship code you won't be sure that you
 didn't break anything. Deciding on what constitutes an adequate amount is up
@@ -1615,13 +1665,17 @@ you achieve very high confidence and developer peace of mind. This means that
 in addition to having a [great testing framework](http://rspec.info/), you also need to use a
 [good coverage tool](https://coveralls.io/).
 
+测试比运行系统更重要。假如你没有测试，或者测试的比例不够，那么每次你部署的时候，你就很难确定系统会不会出错。
+测试的覆盖度是否足够，取决于你的团队，但是100%的测试覆盖率（所有的声明和分支）是你获得非常高的信心和开发时内心平和的关键。这意味着你需要一个额外的[伟大的测试框架](http://rspec.info/), 你也需要使用[好的测试覆盖工具](https://coveralls.io/)
 There's no excuse to not write tests. Aim to always write tests
 for every new feature/module you introduce. If your preferred method is
 Test Driven Development (TDD), that is great, but the main point is to just
 make sure you are reaching your coverage goals before launching any feature,
 or refactoring an existing one.
+没有任何理由不写测试。为你的每个功能/模块写测试。假如你更喜欢的方法是测试驱动开发（TDD），那也挺好，但是主要的一点是，你也要在部署系统的时候确保达到你的测试覆盖目标。
 
 ### Single expectation per test
+### 每个测试只有一个expectation
 
 **坏:**
 ```ruby
@@ -1666,17 +1720,24 @@ end
 **[⬆ 回到目录](#目录)**
 
 ## **Error Handling**
+## **错误处理**
 Thrown errors are a good thing! They mean the runtime has successfully
 identified when something in your program has gone wrong and it's letting
 you know by stopping method execution on the current stack, killing the
 process, and notifying you in the logs with a stack trace.
 
+抛出错误是对的！它们意味着运行时已经可以在程序出错的时候识别出错误，通过在当前的栈停止方法让你知道程序出错，结束进程，然后在日志里记录它们。
+
 ### Don't ignore caught errors
+### 不要忽视捕捉错误
+
 Doing nothing with a caught error doesn't give you the ability to ever fix
 or react to said error. Logging the error
 isn't much better as often times it can get lost in a sea of other logs. If you wrap any bit of code in a `begin/rescue` it means you
 think an error may occur there and therefore you should have a plan,
 or create a code path, for when it occurs.
+在捕捉错误的时候无所作为不会给你修复它的机会，当然你也意识不到出错。用日志记录错误也不太好，因为错误的信息会常常淹没于海量的日志当中。
+假如你把代码用`begin/rescue`包住，这也意味着你知道可能会有错误出现，然后你也应该有一个相应的处理方案。
 
 **坏:**
 ```ruby
@@ -1713,7 +1774,9 @@ end
 ```
 
 ### Provide context with exceptions
+### 提供Exception的上下文
 Use a descriptive error class name and a message when you raise an error. That way you know why the error occurred and you can rescue the specific type of error.
+当你抛出错误的时候，使用描述性的错误类名和错误信息。然后你就可以知道为什么错误会发生，你也可以依据它提供的信息来修改错误。
 
 ***坏:***
 ```ruby
@@ -1735,19 +1798,27 @@ end
 
 
 ## **Formatting**
+## **代码格式**
+
 Formatting is subjective. Like many rules herein, there is no hard and fast
 rule that you must follow. The main point is DO NOT ARGUE over formatting.
 There are tons of tools like [RuboCop](https://github.com/bbatsov/rubocop) to automate this.
 Use one! It's a waste of time and money for engineers to argue over formatting.
+代码格式是非常主观的。就像我们这里的其他规则，没有那条规则是你必须遵循的。要点就是不要在格式化上争论。
+有许许多多的像RuboCop这样的工具来自动化处理他。随便找一个！对于工程师来说，在代码格式上进行争论是浪费时间。
 
 For things that don't fall under the purview of automatic formatting
 (indentation, tabs vs. spaces, double vs. single quotes, etc.) look here
 for some guidance.
+对于那些自动格式化代码工具无法处理的情况，先看看社区的代码规范指南。
+
 
 ### Use consistent capitalization
+### 使用一致的大写规则
 Ruby is dynamically typed, so capitalization tells you a lot about your variables,
 methods, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
+Ruby是动态类型，所以字母大写会告诉你很多关于变量，方法的信息。这些规则是主观的，所以你的团队可以选择任一种他们喜欢的规则。重点是保持一致性。
 
 **坏:**
 ```ruby
@@ -1784,9 +1855,13 @@ class Alpaca; end
 
 
 ### Method callers and callees should be close
+### 方法的调用者和被调用者应该尽量靠近
+
 If a method calls another, keep those methods vertically close in the source
 file. Ideally, keep the caller right above the callee. We tend to read code from
 top-to-bottom, like a newspaper. Because of this, make your code read that way.
+假如一个方法调用另一个，尽量让他们在源文件中的位置靠近一点。理想状况下，让调用方法的方法，正好位于被调用方法的上部。
+我们希望自上而下的读代码，就像读报纸一样。因为这样可以让你的代码读起来的时候也有这种感觉。
 
 **坏:**
 ```ruby
@@ -1871,10 +1946,13 @@ review.perf_review
 **[⬆ 回到目录](#目录)**
 
 ## **Comments**
+## **评论**
 
 
 ### Don't leave commented out code in your codebase
+### 不要把注释过的代码留在代码库
 Version control exists for a reason. Leave old code in your history.
+版本控制可以解决这个问题。所以大胆的把不需要的代码删除了。
 
 **坏:**
 ```ruby
@@ -1891,8 +1969,10 @@ do_stuff
 **[⬆ 回到目录](#目录)**
 
 ### Don't have journal comments
+### 不要在代码里保存日志性的评论
 Remember, use version control! There's no need for dead code, commented code,
 and especially journal comments. Use `git log` to get history!
+记住，使用版本控制！死代码是没有必要保留的，注释过的代码，尤其是日志性的注释都是没有必要保留的。使用`git log`就可以看到他们的历史！
 
 **坏:**
 ```ruby
