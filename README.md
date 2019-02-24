@@ -1789,5 +1789,6 @@ end
 This is also available in other languages:
 
   - [Brazilian Portuguese](https://github.com/uohzxela/clean-code-ruby/blob/master/translations/pt-BR.md)
+  - [Simplified Chinese](https://github.com/uohzxela/clean-code-ruby/blob/master/translations/zh-CN.md)
 
 **[⬆ back to top](#table-of-contents)**
