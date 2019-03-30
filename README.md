@@ -509,15 +509,15 @@ be happier than the vast majority of other programmers.
 ```ruby
 # Global variable referenced by following method.
 # If we had another method that used this name, now it'd be an array and it could break it.
-$name = 'Ryan McDermott'
+name = 'Ryan McDermott'
 
 def split_into_first_and_last_name
-  $name = $name.split(' ')
+  name = $name.split(' ')
 end
 
 split_into_first_and_last_name()
 
-puts $name # ['Ryan', 'McDermott']
+puts name # ['Ryan', 'McDermott']
 ```
 
 **Good:**
