@@ -1394,9 +1394,9 @@ abstractions.
 
 Simply put, DIP keeps high-level
 modules from knowing the details of its low-level modules and setting them up.
-It can accomplish this through DI. A huge benefit of this is that it reduces
-the coupling between modules. Coupling is a very bad development pattern because
-it makes your code hard to refactor.
+It can accomplish this through dependency injection. A huge benefit of this is that
+it reduces the coupling between modules. Coupling is a very bad development pattern
+because it makes your code hard to refactor.
 
 As stated previously, Ruby doesn't have interfaces so the abstractions
 that are depended upon are implicit contracts. That is to say, the methods
