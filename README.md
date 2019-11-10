@@ -274,16 +274,16 @@ def email_clients(clients)
   clients.each { |client| email(client) }
 end
 
-def active_clients(clients)
-  clients.select { |client| active_client?(client) }
+def active(objects)
+  objects.select { |object| active?(object) }
 end
 
-def active_client?(client)
-  client_record = database.lookup(client)
-  client_record.active?
+def active?(object)
+  record = database.lookup(object)
+  record.active?
 end
 
-email_clients(active_clients(clients))
+email_clients(active(clients))
 ```
 **[⬆ back to top](#table-of-contents)**
 
