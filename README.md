@@ -1096,22 +1096,22 @@ etc.) should be open for extension, but closed for modification." What does that
 mean though? This principle basically states that you should allow users to
 add new functionalities without changing existing code.
 
+In the "bad" example below adding another adapter would require changing `HttpRequester` class. This violates OCP.
+
 **Bad:**
 ```ruby
-class Adapter
+class AjaxAdapter
   attr_reader :name
-end
 
-class AjaxAdapter < Adapter
   def initialize
-    super()
     @name = 'ajaxAdapter'
   end
 end
 
-class NodeAdapter < Adapter
+class NodeAdapter
+  attr_reader :name
+
   def initialize
-    super()
     @name = 'nodeAdapter'
   end
 end
@@ -1142,27 +1142,13 @@ end
 
 **Good:**
 ```ruby
-class Adapter
-  attr_reader :name
-end
-
-class AjaxAdapter < Adapter
-  def initialize
-    super()
-    @name = 'ajaxAdapter'
-  end
-
+class AjaxAdapter
   def request(url)
     # ...
   end
 end
 
-class NodeAdapter < Adapter
-  def initialize
-    super()
-    @name = 'nodeAdapter'
-  end
-
+class NodeAdapter
   def request(url)
     # ...
   end
