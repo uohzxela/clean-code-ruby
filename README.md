@@ -1001,7 +1001,6 @@ end
 # Bad because Employees "have" tax data. EmployeeTaxData is not a type of Employee
 class EmployeeTaxData < Employee
   def initialize(ssn, salary)
-    super()
     @ssn = ssn
     @salary = salary
   end
@@ -1248,7 +1247,6 @@ end
 
 class Rectangle < Shape
   def initialize(width, height)
-    super()
     @width = width
     @height = height
   end
@@ -1260,7 +1258,6 @@ end
 
 class Square < Shape
   def initialize(length)
-    super()
     @length = length
   end
 
