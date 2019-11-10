@@ -325,26 +325,21 @@ def interpret(code)
   regexes = [
     # ...
   ]
-
   statements = code.split(' ')
-  tokens = []
-  regexes.each do |regex|
+
+  tokens = regexes.each_with_object([]) do |regex, memo|
     statements.each do |statement|
-      # ...
+      # memo.push(...)
     end
   end
 
-  ast = []
-  tokens.each do |token|
-    # lex...
+  ast = tokens.map do |token|
+    # ...
   end
 
-  result = []
-  ast.each do |node|
-    # result.push(...)
+  ast.map do |node|
+    # ...
   end
-
-  result
 end
 ```
 
@@ -360,34 +355,25 @@ def tokenize(code)
   regexes = [
     # ...
   ]
-
   statements = code.split(' ')
-  tokens = []
-  regexes.each do |regex|
+
+  regexes.each_with_object([]) do |regex, tokens|
     statements.each do |statement|
       # tokens.push(...)
     end
   end
-
-  tokens
 end
 
 def lex(tokens)
-  ast = []
-  tokens.each do |token|
-    # ast.push(...)
+  tokens.map do |token|
+    # ...
   end
-
-  ast
 end
 
 def parse(ast)
-  result = []
-  ast.each do |node|
-    # result.push(...)
+  ast.map do |node|
+    # ...
   end
-
-  result
 end
 ```
 **[⬆ back to top](#table-of-contents)**
