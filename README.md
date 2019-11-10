@@ -289,7 +289,7 @@ email_clients(active_clients(clients))
 
 ### Method names should say what they do
 Poorly named methods add to the code reviewer's cognitive load at best, and mislead the
-code reviewer at worst. Strive to capture the the precise intent when naming methods.
+code reviewer at worst. Strive to capture the precise intent when naming methods.
 
 **Bad:**
 ```ruby
