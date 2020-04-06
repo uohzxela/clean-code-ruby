@@ -21,7 +21,7 @@
 
 
 
-## 介绍 
+## 介绍
 
 软件工程的原则，来自于Robert C. Martin的书[*Clean Code*](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882),
 应用于Ruby。这不是样式指南。它是构建[可读，可复用，可重构](https://github.com/ryanmcdermott/3rs-of-software-architecture) 工业级的Ruby软件工程指南。
@@ -828,7 +828,7 @@ toy.price = 50
 toy.price # => 50
 ```
 
-然而，你必须意识到在有些情况，使用`attr_accessor`也是臭代码，你可以看看[这里](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html)
+然而，你必须意识到在有些情况，使用`attr_accessor`也是臭代码，你可以看看[这里](https://solnic.codes/2012/04/04/get-rid-of-that-code-smell-attributes)
 **[⬆ 回到目录](#目录)**
 
 
