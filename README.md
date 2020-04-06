@@ -889,7 +889,7 @@ toy.price = 50
 toy.price # => 50
 ```
 
-However, you have to be aware that in some situations, using `attr_accessor` is a code smell, read more [here](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
+However, you have to be aware that in some situations, using `attr_accessor` is a code smell, read more [here](https://solnic.codes/2012/04/04/get-rid-of-that-code-smell-attributes).
 
 **[⬆ back to top](#table-of-contents)**
 

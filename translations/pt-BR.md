@@ -902,7 +902,7 @@ toy.price # => 50
 ```
 Contudo, você precisa estar ciente de que em algumas situações, usar
 `attr_accessor` é um *code smell*, leia mais sobre
-[aqui](http://solnic.eu/2012/04/04/get-rid-of-that-code-smell-attributes.html).
+[aqui](https://solnic.codes/2012/04/04/get-rid-of-that-code-smell-attributes).
 
 **[⬆ retornar ao topo](#sumário)**
 
