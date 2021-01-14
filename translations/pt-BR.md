@@ -410,7 +410,7 @@ Conseguir a abstração certa é crítico, é por ísso que você deveria seguir
 princípios SOLID explicado na seção de **Classes**. Abstrações ruins podem ser
 piores do que código duplicado, então seja cauteloso! Tendo dito isso, se você
 conseguir criar uma boa abstração, crie! Não se repita, caso contrário você vai
-se encontrar atualizando vários lugares sempre que vocÊ quiser mudar uma coisa.
+se encontrar atualizando vários lugares sempre que você quiser mudar uma coisa.
 
 **Ruim:**
 ```ruby
@@ -693,7 +693,7 @@ das pessoas dizem, "como eu deveria fazer qualquer coisa sem uma declaração `i
 em muitos casos. A segunda pergunta é geralmente, "bem, isso é ótimo, mas por
 que eu iria querer fazer isso?". A resposta é um conceito de código limpo que
 aprendemos anteriormente: uma função deveria fazer apenas uma coisa. Quando
-você tem classes e funções que tem declarações do tipo `if`, você está dizendo
+você tem classes e funções que têm declarações do tipo `if`, você está dizendo
 ao usuário daquela função que ela faz mais do que uma coisa. Lembre-se, faça
 apenas uma coisa.
 
@@ -769,7 +769,7 @@ end
 ```
 **[⬆ retornar ao topo](#sumário)**
 
-### Evite Verificações de Tipo (Parte 1)
+### Evite Verificações de Tipo (Parte 2)
 Se você está trabalhando com tipos básicos como strings e inteiros e você
 não pode usar polimorfismo, mas ainda sente necessidade de verificar o tipo,
 você deveria considerar usar [contracts.ruby](https://github.com/egonSchiele/contracts.ruby).
@@ -827,7 +827,7 @@ inventory_tracker('apples', req, 'www.inventory-awesome.io')
 ```
 **[⬆ retornar ao topo](#sumário)**
 
-## **Objetos e Estruturas de Dado**
+## **Objetos e Estruturas de Dados**
 ### Use *getters* e *setters*
 Usar *getters* e *setters* para acessar informações de objetos poderia ser
 melhor do que simplesmente procurar por uma propriedade em um objeto. "Por que?"
@@ -917,7 +917,7 @@ esse padrão reduz a verbosidade do código (ex: Consultas do ActiveRecord), mui
 vezes ele tem alguns custos:
 
 1. Quebra [Encapsulamento](https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29)
-2. Breaks [Decoradores (*Decorators*)](https://en.wikipedia.org/wiki/Decorator_pattern)
+2. Quebra [Decoradores (*Decorators*)](https://en.wikipedia.org/wiki/Decorator_pattern)
 3. É mais difícil de trabalhar com [*mock*](https://en.wikipedia.org/wiki/Mock_object)
 em suítes de teste.
 4. Faz com que diferenças (*diffs*) entre commits sejam mais difíceis de serem lidas.
@@ -992,9 +992,9 @@ car.save
 
 ### Prefira Composição ao invés de Herança
 Essa declaração ficou famosa no livro
-Padrões de Design([*Design Patterns*](https://en.wikipedia.org/wiki/Design_Patterns))
+Padrões de Design ([*Design Patterns*](https://en.wikipedia.org/wiki/Design_Patterns))
 escrito pelo Bando dos Quatro (*Gang of Four*). Você deveria preferir composição
-ao invés de heranção onde puder. Existem muitas boas razões para usar herança
+ao invés de herança onde puder. Existem muitas boas razões para usar herança
 e muitas boas razões para usar composição. O ponto principal para esse ditado
 é que se sua mente vai instintivamente para herança, tente pensar se composição
 poderia modelar seu problema melhor. Em alguns casos, ela pode.
@@ -1021,7 +1021,7 @@ class Employee
   # ...
 end
 
-# Ruim porque Employees "tem" informações sobre tax. EmployeeTaxData não é um tipo de Employee
+# Ruim porque Employees "têm" informações sobre tax. EmployeeTaxData não é um tipo de Employee
 class EmployeeTaxData < Employee
   def initialize(ssn, salary)
     super()
@@ -1421,7 +1421,7 @@ pode ser alcançado através de inversão de dependências. Um grande benefício
 é a redução de acoplamento entre módulos. Acoplamento é muito ruim em
 padrões de desenvolvimento porque torna seu código difícil de ser refatorado.
 
-Como dito anteriormente, Ruby não tem interfaces, então as abstrações tem
+Como dito anteriormente, Ruby não tem interfaces, então as abstrações têm
 dependências em contratos subentendidos. Isso que dizer os métodos e
 propriedades que uma classe/objeto expõem para outra classe/objeto. No exemplo
 abaixo, o contrato subentendido é que qualquer módulo de *Request* para um
@@ -1493,7 +1493,7 @@ class InventoryRequesterV2
   end
 end
 
-# Ao construir nossas dependências externamente e injeta-las, nós podemos
+# Ao construir nossas dependências externamente e injetá-las, nós podemos
 # facilmente substituir nosso módulo de request por um novo que use WebSockets.
 inventory_tracker = InventoryTracker.new(['apples', 'bananas'], InventoryRequesterV2.new)
 inventory_tracker.request_items
