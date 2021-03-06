@@ -539,7 +539,7 @@ puts new_name # ['Ryan', 'McDermott']
 
 ### Evite Efeitos Colaterais (Parte 2)
 Em Ruby, tudo é um objeto e tudo é passado por valor, mas esses valores são
-referências para objetos. No caso de objetos e vetores, se seu sua função faz
+referências para objetos. No caso de objetos e vetores, se  sua função faz
 uma alteração em um vetor de um `carrinho` de compras, por exemplo, ao adicionar
 um item de compra, então qualquer outra função que use o vetor desse carrinho
 será afetada por essa adição. Isso pode ser ótimo, no entanto pode ser ruim
