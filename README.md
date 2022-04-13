@@ -236,6 +236,8 @@ properties are being used.
 def create_menu(title, body)
   # ...
 end
+
+create_menu('Foo', 'Bar')
 ```
 
 **Good:**
